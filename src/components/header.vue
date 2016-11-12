@@ -1,6 +1,11 @@
 <template>
   <div class="">
+    <div>
 
+    </div>
+    <div>
+
+    </div>
   </div>
 </template>
 
@@ -8,10 +13,7 @@
 export default {
   name: 'hello',
   props:{
-    customStyle:{
-      type: Object,
-      default:{}
-    }
+
   },
   data() {
     return {

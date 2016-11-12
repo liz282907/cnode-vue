@@ -10,14 +10,15 @@ require.config({
         'Home': './pages/home.vue',
         'About': './pages/about.vue',
         'Setting': './pages/setting.vue',
-        'Message': './pages/message.vue'
+        'Message': './pages/messages.vue'
     }
 });
 
 const Home = resolve => require(['./pages/home.vue'],resolve);
-const Message = resolve => require(['Message'],resolve);
-const About = resolve => require(['About'],resolve);
-const Setting = resolve => require(['Setting'],resolve);
+// const Message = resolve => require(['Message'],resolve);
+const Message = resolve => require(['./pages/messages.vue'],resolve);
+const About = resolve => require(['./pages/about.vue'],resolve);
+const Setting = resolve => require(['./pages/setting.vue'],resolve);
 
 
 

@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import NavHead from './components/header';
-import Card from './components/card';
+import NavHead from '../components/header';
+import Card from '../components/card';
 
 export default {
   name: 'app',
