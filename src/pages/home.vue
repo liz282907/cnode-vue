@@ -1,15 +1,17 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
-  </div>
+  <nav-head></nav-head>
+
 </template>
 
 <script>
+import NavHead from './components/header';
+import Card from './components/card';
 
 export default {
   name: 'app',
   components: {
+    'nav-head': NavHead,
+    'card': Card
   },
 };
 </script>
