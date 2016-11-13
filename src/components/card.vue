@@ -1,22 +1,22 @@
 <template>
-  <div class="">
+  <div class="card">
     <h3>
-      <span :class="tagClassName"></span>
-      {{title}}
+      <span :class="tagClassName">{{tagName}}</span>
+      <span class="title">{{title}}</span>
     </h3>
     <div class="info">
       <img class="avatar" :src="imgSrc" alt="avatar">
       <div class="status">
-         <p>
-           <span class="creator">{{creator}}</span>
-           <span class="stats">
-              <em>{{clickCount}}/</em>
+         <p class="clearfix">
+           <span class="creator fl">{{creator}}</span>
+           <span class="stats fr">
+              <em>{{clickCount}} /</em>
               {{commentCount}}
             </span>
          </p>
-         <p class="">
-           <time>{{createTime}}</time>
-           <time>{{updateTime}}</time>
+         <p class="clearfix">
+           <time class="fl">创建于: {{createTime}}</time>
+           <time class="fr">{{updateTime}}</time>
          </p>
       </div>
     </div>
@@ -32,6 +32,7 @@ export default {
       type: Boolean,
       default: false
     },
+    tagName: "",
     title:"",
     customStyle:{
       type: Object,

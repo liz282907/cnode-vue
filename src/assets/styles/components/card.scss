@@ -1,0 +1,52 @@
+spam{
+    @extend .text-sec;
+}
+
+.card {
+    width: 100%;
+    font-size: 14px;
+    padding: $container-padding;
+    border-top: 1px solid #f0f0f0;
+    h3,
+    .info {
+        display: flex
+    }
+    ;
+    .avatar,
+    .tag {
+        width: 12%;
+        margin-right: 10px;
+    }
+    .status,
+    .title {
+        flex: 1;
+    }
+    .info{
+        padding-top: 0.7em
+    }
+}
+h3{
+    font-size: 16px;
+    color: #333;
+}
+
+
+.info {
+    .avatar {
+        display: inline-block;
+        height: auto;
+        border-radius: 50%;
+
+        border: 1px solid red;
+    }
+    p{
+        .creator{
+            @extend .text-primary;
+            font-weight: bold;
+        }
+        em{
+            color: #64DD17;
+            font-weight: bold;
+        }
+    }
+}

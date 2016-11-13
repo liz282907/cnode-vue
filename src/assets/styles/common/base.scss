@@ -1,7 +1,7 @@
-.left{
+.fl{
     float: left;
 }
-.right{
+.fr{
     float: right;
 }
 .clearfix{
@@ -13,6 +13,18 @@
         height: 0;
     }
 }
-.tag{
-    padding: 0.066667rem;
+.text-primary{
+    color: rgba(0,0,0,0.87);
 }
+.text-sec{
+    color: rgba(#000, 0.54);
+}
+
+.tag{
+    font-size: 12px;
+    text-align: center;
+    padding: 0.066667rem;
+    @extend .text-sec;
+    background-color: #eee;
+}
+

@@ -1,9 +1,14 @@
 <template>
   <div>
       <nav-head></nav-head>
+      <div class="nav-bar">
+        <span><i class="iconfont nav-img">&#xe745;</i></span>
+        <h1>{{category}}</h1>
+
+      </div>
       <ul>
         <li v-for="item in postList">
-          <card :title="item.title" :isTop="item.isTop" :imgSrc="item.imgSrc"
+          <card :title="item.title" :tagName="item.tagName" :isTop="item.isTop" :imgSrc="item.imgSrc"
                 :commentCount.number="item.commentCount"
                 :clickCount.number="item.clickCount"
                 :creator="item.creator"
@@ -24,6 +29,7 @@ const postList = [
   {
     // customStyle:,
     title: "光棍节程序员闯关",
+    tagName: "置顶",
     // imgSrc: "./assets/images/logo.png",
     commentCount: 3552,
     clickCount: 26,
@@ -45,7 +51,9 @@ export default {
   },
   data(){
     return {
-      postList: postList
+      postList,
+      category: "问答"
+
     }
   }
 
@@ -53,12 +61,5 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
