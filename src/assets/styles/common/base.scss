@@ -21,9 +21,11 @@
 }
 
 .tag{
+    display: inline-block;
     font-size: 12px;
     text-align: center;
-    padding: 0.066667rem;
+    vertical-align: middle;
+    padding: 0.066667rem 0;
     @extend .text-sec;
     background-color: #eee;
 }

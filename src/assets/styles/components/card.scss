@@ -1,5 +1,7 @@
-spam{
+span{
     @extend .text-sec;
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .card {
@@ -23,6 +25,9 @@ spam{
     }
     .info{
         padding-top: 0.7em
+    }
+    .title{
+        @extend .text-primary;
     }
 }
 h3{
