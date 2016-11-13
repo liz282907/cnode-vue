@@ -10,6 +10,8 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
 
+var fs = require('fs')
+
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 // Define HTTP proxies to your custom API backend
@@ -58,6 +60,11 @@ app.use(hotMiddleware)
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
+app.get('/topics',function(req,res){
+  var response = JSON.parse(fs.readFileSync('./mock/serverInfo.json'));
+  res.json(response);
+})
+
 
 module.exports = app.listen(port, function (err) {
   if (err) {
