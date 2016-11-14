@@ -56,16 +56,6 @@ export default {
     'nav-head': NavHead,
     'card': Card
   },
-  beforeCreate(){
-    window.addEventListener("scroll",this.infiniteScroll);
-  },
-  created(){
-    this.fetchServerList(this.page);
-
-  },
-  beforeDestroy(){
-    window.removeEventListener("scroll",this.infiniteScroll);
-  },
   props:['tab'],
   data(){
     return {
@@ -73,12 +63,29 @@ export default {
       page: 1
     }
   },
+
+  beforeCreate(){
+    console.log("---------",this.infiniteScroll);
+    // this.infiniteScroll = this.infiniteScroll.bind(this);
+    // window.addEventListener("scroll",this.infiniteScroll);
+  },
+  created(){
+
+    this.fetchServerList(this.page);
+    this.infiniteScroll = this.infiniteScroll.bind(this);
+    window.addEventListener("scroll",this.infiniteScroll);
+
+  },
+  mounted(){
+    console.log("mounted ",this.infiniteScroll);
+  },
+  beforeDestroy(){
+    window.removeEventListener("scroll",this.infiniteScroll);
+  },
+
   methods:{
     infiniteScroll(){
-      console.log("-----------inscroll",this.page);
-      return ()=>{
         throtte(this.fetchServerList.bind(this,this.page),1000);
-      }
     },
     getTransformedResponse(prevResponse){
       return prevResponse.data.map(item=>{
@@ -87,6 +94,7 @@ export default {
       })
     },
     fetchServerList(page){
+      console.log("---------",page);
       axios.get('https://cnodejs.org/api/v1/topics',{
           params:{
             page,
@@ -97,6 +105,7 @@ export default {
       .then(response=>{
           if(response.data){
             const appendedList = this.getTransformedResponse(response.data);
+            console.log("---------",this);
             this.postList = [...this.postList,...appendedList];
             console.log("this page",this.page);
             this.page++;
