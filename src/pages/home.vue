@@ -2,7 +2,7 @@
   <div>
       <nav-head></nav-head>
       <div class="nav-bar">
-        <span><i class="iconfont nav-img">&#xe745;</i></span>
+        <span><i class="iconfont nav-img" @click='show=true'>&#xe745;</i></span>
         <h1>{{tab}}</h1>
 
       </div>
@@ -18,6 +18,7 @@
           ></card>
         </li>
       </ul>
+      <slide-card :show='show' :cancel='handleModal.bind(this,false)'></slide-card>
   </div>
 
 </template>
@@ -26,6 +27,7 @@ import moment from 'moment';
 import NavHead from '../components/header';
 import Card from '../components/card';
 import { throtte,isScrollDown,check_if_needs_more_content } from '../utils/util';
+import SlideCard from '../components/slide-card.vue'
 
 moment.locale("zh-cn");
 
@@ -55,14 +57,16 @@ let responseDict = {};
 export default {
   components: {
     'nav-head': NavHead,
-    'card': Card
+    'card': Card,
+    'slide-card': SlideCard
   },
   props:['tab'],
   data(){
     return {
       postList: [],
       page: 1,
-      initTop: document.scrollTop
+      initTop: document.scrollTop,
+      show: false
     }
   },
 
@@ -130,6 +134,9 @@ export default {
 
       })
       .catch(err=> console.log(err));
+    },
+    handleModal(value) {
+      this.show = value;
     }
   }
 
