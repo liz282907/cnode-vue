@@ -10,8 +10,8 @@
          <p class="clearfix">
            <span class="creator fl">{{creator}}</span>
            <span class="stats fr">
-              <em>{{clickCount}} /</em>
-              {{commentCount}}
+              <em>{{commentCount}} /</em>
+              {{clickCount}}
             </span>
          </p>
          <p class="clearfix">
