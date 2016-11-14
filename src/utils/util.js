@@ -7,7 +7,6 @@ function throtte(func,wait,options){
         const now = Date.now();
         const gap = now - lastTime;
         if( gap >= wait ){
-            console.log("------arguments",arguments);
             func.apply(this,arguments);
             // if(param===options.terminal) return;
             lastTime = now;

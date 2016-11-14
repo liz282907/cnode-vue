@@ -65,7 +65,7 @@ export default {
   },
 
   beforeCreate(){
-    console.log("---------",this.infiniteScroll);
+    // console.log("---------",this.infiniteScroll);
     // this.infiniteScroll = this.infiniteScroll.bind(this);
     // window.addEventListener("scroll",this.infiniteScroll);
   },
@@ -73,19 +73,18 @@ export default {
 
     this.fetchServerList(this.page);
     this.infiniteScroll = this.infiniteScroll.bind(this);
-    window.addEventListener("scroll",this.infiniteScroll);
+    window.addEventListener("scroll",this.infiniteScroll());
 
   },
   mounted(){
-    console.log("mounted ",this.infiniteScroll);
   },
   beforeDestroy(){
-    window.removeEventListener("scroll",this.infiniteScroll);
+    window.removeEventListener("scroll",this.infiniteScroll());
   },
 
   methods:{
     infiniteScroll(){
-        throtte(this.fetchServerList.bind(this,this.page),1000);
+        return throtte(this.fetchServerList.bind(this,{page: this.page}),1000);
     },
     getTransformedResponse(prevResponse){
       return prevResponse.data.map(item=>{
@@ -93,7 +92,7 @@ export default {
         return item;
       })
     },
-    fetchServerList(page){
+    fetchServerList({page=1}){
       console.log("---------",page);
       axios.get('https://cnodejs.org/api/v1/topics',{
           params:{
@@ -105,9 +104,7 @@ export default {
       .then(response=>{
           if(response.data){
             const appendedList = this.getTransformedResponse(response.data);
-            console.log("---------",this);
             this.postList = [...this.postList,...appendedList];
-            console.log("this page",this.page);
             this.page++;
           }
 
