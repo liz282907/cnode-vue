@@ -30,6 +30,7 @@ import { throtte } from '../utils/util';
 moment.locale("zh-cn");
 
 const limit = 10;
+let responseDict = {};
 
 // const postList = [
 //   {
@@ -94,6 +95,9 @@ export default {
     },
     fetchServerList({page=1}){
       console.log("---------",page);
+
+      if(responseDict[page]) return;
+
       axios.get('https://cnodejs.org/api/v1/topics',{
           params:{
             page,
@@ -104,8 +108,8 @@ export default {
       .then(response=>{
           if(response.data){
             const appendedList = this.getTransformedResponse(response.data);
+            responseDict[this.page++] = appendedList;
             this.postList = [...this.postList,...appendedList];
-            this.page++;
           }
 
       })
