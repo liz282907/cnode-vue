@@ -25,40 +25,46 @@
 import moment from 'moment';
 import NavHead from '../components/header';
 import Card from '../components/card';
+import { throtte } from '../utils/util';
 
 moment.locale("zh-cn");
 
 const limit = 10;
 
-const postList = [
-  {
-    // customStyle:,
-    top: false,
-    title: "光棍节程序员闯关",
-    tagName: "置顶",
-    // imgSrc: "./assets/images/logo.png",
-    reply_count: 26,
-    visit_count: 2552,
-    good: false,
-    author: {
-      loginname:"nswbmw",
-      avatar_url: "https://avatars.githubusercontent.com/u/4279697?v=3&s=120"
-    },
-    create_at: "2016-09-27 15:53:31",
-    last_reply_at: moment("2016-11-12T07:12:05.514Z").fromNow(),
-    isTop: false
-  }
-]
+// const postList = [
+//   {
+//     // customStyle:,
+//     top: false,
+//     title: "光棍节程序员闯关",
+//     tagName: "置顶",
+//     // imgSrc: "./assets/images/logo.png",
+//     reply_count: 26,
+//     visit_count: 2552,
+//     good: false,
+//     author: {
+//       loginname:"nswbmw",
+//       avatar_url: "https://avatars.githubusercontent.com/u/4279697?v=3&s=120"
+//     },
+//     create_at: "2016-09-27 15:53:31",
+//     last_reply_at: moment("2016-11-12T07:12:05.514Z").fromNow(),
+//     isTop: false
+//   }
+// ]
 
 export default {
-  name: 'app',
   components: {
     'nav-head': NavHead,
     'card': Card
   },
+  beforeCreate(){
+    window.addEventListener("scroll",this.infiniteScroll);
+  },
   created(){
     this.fetchServerList(this.page);
-    // window.addEventListener("scroll",);
+
+  },
+  beforeDestroy(){
+    window.removeEventListener("scroll",this.infiniteScroll);
   },
   props:['tab'],
   data(){
@@ -69,7 +75,10 @@ export default {
   },
   methods:{
     infiniteScroll(){
-
+      console.log("-----------inscroll",this.page);
+      return ()=>{
+        throtte(this.fetchServerList.bind(this,this.page),1000);
+      }
     },
     getTransformedResponse(prevResponse){
       return prevResponse.data.map(item=>{
@@ -78,7 +87,7 @@ export default {
       })
     },
     fetchServerList(page){
-      axios.get('/topics',{
+      axios.get('https://cnodejs.org/api/v1/topics',{
           params:{
             page,
             tab: 'good',
@@ -86,7 +95,13 @@ export default {
           }
         })
       .then(response=>{
-          this.postList = this.getTransformedResponse(response.data);
+          if(response.data){
+            const appendedList = this.getTransformedResponse(response.data);
+            this.postList = [...this.postList,...appendedList];
+            console.log("this page",this.page);
+            this.page++;
+          }
+
       })
       .catch(err=> console.log(err));
     }
