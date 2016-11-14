@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <i class="iconfont icon-menu" 
       @click='show=true'>
     </i>
@@ -49,7 +48,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity .5s

@@ -1,0 +1,17 @@
+
+.nav-bar{
+    padding: 0 $container-padding;
+    vertical-align: middle;
+    display: inline-block;
+
+    .nav-img{
+        font-size: 36px;
+    }
+    h1{
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 24px;
+        margin-left: 1em;
+        // line-height: 1.5;
+    }
+}
