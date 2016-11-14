@@ -85,22 +85,25 @@ export default {
 
   methods:{
     infiniteScroll(){
-        return throtte(this.fetchServerList.bind(this,{page: this.page}),1000);
+        return throtte(this.fetchServerList.bind(this),1000);
     },
     getTransformedResponse(prevResponse){
       return prevResponse.data.map(item=>{
+        // debugger;
+        item.create_at = moment(item.create_at).format("YYYY-MM-DD HH:mm");
         item.last_reply_at = moment(item.last_reply_at).fromNow();
+
         return item;
       })
     },
-    fetchServerList({page=1}){
-      console.log("---------",page);
+    fetchServerList(){
+      // console.log("---------",page);
 
-      if(responseDict[page]) return;
+      if(responseDict[this.page]) return;
 
       axios.get('https://cnodejs.org/api/v1/topics',{
           params:{
-            page,
+            page: this.page,
             tab: 'good',
             limit
           }
