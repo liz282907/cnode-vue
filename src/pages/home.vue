@@ -25,7 +25,7 @@
 import moment from 'moment';
 import NavHead from '../components/header';
 import Card from '../components/card';
-import { throtte } from '../utils/util';
+import { throtte,isScrollDown,check_if_needs_more_content } from '../utils/util';
 
 moment.locale("zh-cn");
 
@@ -61,7 +61,8 @@ export default {
   data(){
     return {
       postList: [],
-      page: 1
+      page: 1,
+      initTop: document.scrollTop
     }
   },
 
@@ -72,7 +73,7 @@ export default {
   },
   created(){
 
-    this.fetchServerList(this.page);
+    this.fetchPage(1);
     this.infiniteScroll = this.infiniteScroll.bind(this);
     window.addEventListener("scroll",this.infiniteScroll());
 
@@ -84,8 +85,8 @@ export default {
   },
 
   methods:{
-    infiniteScroll(){
-        return throtte(this.fetchServerList.bind(this),1000);
+    infiniteScroll(e){
+        return throtte(this.fetchWhenScroll.bind(this),1000);
     },
     getTransformedResponse(prevResponse){
       return prevResponse.data.map(item=>{
@@ -96,14 +97,26 @@ export default {
         return item;
       })
     },
-    fetchServerList(){
-      // console.log("---------",page);
 
-      if(responseDict[this.page]) return;
+
+    fetchWhenScroll(){
+      // let isDown = isScrollDown(this.initTop,(curTop)=>{
+      //   this.initTop = curTop;
+      // });
+      // isDown? this.page++ : this.page--;
+      if(check_if_needs_more_content()){
+        console.log("--------------page-----------",this.page);
+        this.fetchPage(this.page);
+        this.page++;
+      }
+    },
+
+    fetchPage(page){
+      if(responseDict[page]) return;
 
       axios.get('https://cnodejs.org/api/v1/topics',{
           params:{
-            page: this.page,
+            page,
             tab: 'good',
             limit
           }
@@ -111,7 +124,7 @@ export default {
       .then(response=>{
           if(response.data){
             const appendedList = this.getTransformedResponse(response.data);
-            responseDict[this.page++] = appendedList;
+            responseDict[page] = appendedList;
             this.postList = [...this.postList,...appendedList];
           }
 
