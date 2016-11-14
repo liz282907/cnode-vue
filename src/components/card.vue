@@ -19,7 +19,7 @@ export default {
     }
   },
   computed:{
-    tagClassName:['tag',{'tag-highlight':isTop}]
+    tagClassName:['tag',{'tag-highlight':'isTop'}]
   },
   data() {
     return {

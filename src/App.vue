@@ -1,16 +1,41 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <i class="iconfont icon-menu" 
+      @click='show=true'>
+    </i>
+   <div id="demo">
+    <button @click="isshow=!isshow">
+      Toggle
+    </button>
+    <transition name="fade">
+      <p v-if="isshow">hello</p>
+    </transition>
+  </div>
+    <SlideCard :show='show' :cancel='handleModal.bind(this,false)'></SlideCard>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
+import SlideCard from './components/slide-card.vue'
 export default {
   name: 'app',
   components: {
+    SlideCard
   },
+  data() {
+    return {
+      show: false,
+      isshow: false
+    }
+  },
+  methods: {
+    handleModal(value) {
+      this.show = value;
+    }
+  }
+
 };
 </script>
 
@@ -23,8 +48,13 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
 </style>
