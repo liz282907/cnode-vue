@@ -63,7 +63,7 @@ export default {
         cancel: {
              type: Function,
              default: function() {
-                 
+
              }
         }
     },
@@ -72,7 +72,7 @@ export default {
     methods: {
     },
     watch: {
-       
+
     }
 
 }
@@ -85,7 +85,7 @@ export default {
             transition: all 0.5s ease;
             left: 0;
         }
-        
+
     }
     .slide-fade-enter.left-slide-card, .slide-fade-leave-active.left-slide-card {
         .left-nav-bar {
@@ -95,7 +95,7 @@ export default {
         }
     }
     .left-slide-card{
-       
+
     }
     .left-nav-bar {
         position: fixed;
@@ -107,13 +107,13 @@ export default {
         background: #fff;
         overflow: hidden;
         z-index: 10000;
-       
+
     }
     .user-login-wrapper {
         padding: 30px;
         padding-left: 0;
         line-height: 30px;
-        border-bottom: 0.5px solid #d4d4d4; 
+        border-bottom: 0.5px solid #d4d4d4;
         span {
             margin-left: 10px;
         }
@@ -141,5 +141,5 @@ export default {
         background-color: #000;
         opacity: 0.3;
     }
-    
+
 </style>

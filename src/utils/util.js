@@ -1,17 +1,35 @@
 function throtte(func,wait,options){
 
-    let lastTime = Date.now();
+    let isFirst = true;
+    let funcId,gap,lastTime,duration = 0;
+
+    const finalOptions = Object.assign({},{
+        leading: true,
+        trailing: true
+    },options);
+
+    if(!finalOptions.leading && !finalOptions.trailing) {
+        alert("不可以同时设置leading,trailing为负");
+        return;
+    }
+
     return function next(){
 
-        // if(!lastTime) lastTime = 0;
         const now = Date.now();
-        const gap = now - lastTime;
-        if( gap >= wait ){
-            func.apply(this,arguments);
-            // if(param===options.terminal) return;
-            lastTime = now;
+
+        if( isFirst || (gap = now -lastTime) >= wait ){
+            if(isFirst) isFirst = false;
+            //leading:false时，不执行，等下一次wait的时间以后
+            if(finalOptions.leading) func.apply(this,arguments);
         }
-        // next();
+        else{
+            clearTimeout(funcId);
+            //trailing true时才执行。
+            if(finalOptions.trailing)
+                funcId = setTimeout(func.bind(this,arguments), wait-gap);
+        }
+        lastTime = now;
+
     }
 
 }
