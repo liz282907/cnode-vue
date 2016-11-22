@@ -36,8 +36,8 @@ let func1 = (function(){
 // throtte(func1,1000,{terminal: 5})();
 
 function isScrollDown(initTop,cb){
-    const curTop = document.documentElement.scrollTop;
-
+    const curTop = document.body.scrollTop||document.documentElement.scrollTop;
+    console.log(curTop,initTop);
     if(curTop>initTop){
         cb(curTop);
         return true;
@@ -67,11 +67,7 @@ function check_if_needs_more_content(){
 
     const windowHeight = window.innerHeight  || document.documentElement.clientHeight;
       let distanceToDocBottom = docHeight-windowHeight-scrollTop;
-      console.log("------document  ",docHeight);
-      console.log("------windowHeight ",windowHeight);
-      console.log("------scrollTop ",scrollTop);
-      console.log("------distanceToDocBottom ",distanceToDocBottom);
-      var distanceFromBottom = document.body.scrollHeight - window.innerHeight - window.scrollY;
+
       if(Math.abs(distanceToDocBottom)<300) return true;
       return false;
     }

@@ -62,7 +62,7 @@ export default {
     return {
       postList: [],
       page: 1,
-      initTop: document.scrollTop
+      initTop: document.documentElement.scrollTop
     }
   },
 
@@ -100,15 +100,16 @@ export default {
 
 
     fetchWhenScroll(){
-      // let isDown = isScrollDown(this.initTop,(curTop)=>{
-      //   this.initTop = curTop;
-      // });
-      // isDown? this.page++ : this.page--;
-      if(check_if_needs_more_content()){
-        console.log("--------------page-----------",this.page);
-        this.fetchPage(this.page);
-        this.page++;
-      }
+      let isDown = isScrollDown(this.initTop,(curTop)=>{
+        this.initTop = curTop;
+      });
+      isDown? this.page++ : this.page--;
+      this.fetchPage(this.page);
+      // if(check_if_needs_more_content()){
+      //   console.log("--------------page-----------",this.page);
+      //   this.fetchPage(this.page);
+      //   this.page++;
+      // }
     },
 
     fetchPage(page){
