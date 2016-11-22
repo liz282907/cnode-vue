@@ -65,7 +65,7 @@ export default {
     return {
       postList: [],
       page: 1,
-      initTop: document.documentElement.scrollTop
+      initTop: document.documentElement.scrollTop,
       show: false
     }
   },
