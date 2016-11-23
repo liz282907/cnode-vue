@@ -30,8 +30,9 @@
     background-color: #eee;
 }
 //markdown
-.markdown-body {
-    img {
+.markdown-text {
+    * {
         max-width: 100%;
+        word-wrap: break-all;
     }
 }
