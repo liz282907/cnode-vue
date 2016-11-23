@@ -25,6 +25,7 @@ export default {
 @import './assets/styles/fonts/iconfont.css';
 @import './assets/styles/pages/index.scss';
 #app {
+  overflow-x: hidden;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

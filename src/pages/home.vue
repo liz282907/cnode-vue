@@ -8,6 +8,7 @@
       </div>
       <ul>
         <li v-for="item in postList">
+          <router-link :to="{ name: 'topic', params: { id: item.id }}">
           <card :title="item.title" :tagName="item.tagName" :isTop="item.top" :imgSrc="item.author.avatar_url"
                 :commentCount.number="item.reply_count"
                 :clickCount.number="item.visit_count"
@@ -16,6 +17,7 @@
                 :updateTime="item.last_reply_at"
 
           ></card>
+          </router-link>
         </li>
       </ul>
       <slide-card :show='show' :cancel='handleModal.bind(this,false)'></slide-card>

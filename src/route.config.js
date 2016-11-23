@@ -10,7 +10,8 @@ require.config({
         'Home': './pages/home.vue',
         'About': './pages/about.vue',
         'Setting': './pages/setting.vue',
-        'Message': './pages/messages.vue'
+        'Message': './pages/messages.vue',
+        'TopicDetail': './pages/topicDetail'
     }
 });
 
@@ -20,7 +21,7 @@ const Message = resolve => require(['./pages/messages.vue'],resolve);
 const About = resolve => require(['./pages/about.vue'],resolve);
 const Setting = resolve => require(['./pages/setting.vue'],resolve);
 
-
+const TopicDetail = resolve => require(['./pages/topicDetail'], resolve)
 
 let routes = [
     {
@@ -43,6 +44,11 @@ let routes = [
         path: "/about",
         component: About
     },
+    {
+        path: "/topic/:id",
+        name: "topic",
+        component: TopicDetail
+    }
 ]
 
 const router = new VueRouter({

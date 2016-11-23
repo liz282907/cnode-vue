@@ -29,4 +29,9 @@
     @extend .text-sec;
     background-color: #eee;
 }
-
+//markdown
+.markdown-body {
+    img {
+        max-width: 100%;
+    }
+}
