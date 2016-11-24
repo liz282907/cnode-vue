@@ -7,18 +7,24 @@
                 <span class="margin-left">{{data.author.loginname}}</span>
                 <span class="right margin-right">{{data.reply_count}}次浏览</span>
                 <span class="right">{{data.create_at}}，</span>
-                
+
             </div>
             <div class="page-content" v-html="data.content">
             </div>
             <div class="page-reply">
                 <ul>
-                    <li v-for="item in data.replies" class="page-reply-item">
-                        <div class="page-reply-item-header">
+                    <li v-for="(item,index) in data.replies" class="page-reply-item">
+                        <div class="page-reply-item-header clearfix">
                             <img :src="item.author.avatar_url" />
-                            <span class="right">
-                                {{item.author.loginname}}
-                            </span>
+                            <div class="reply-detail">
+                                <h3>{{item.author.loginname}}</h3>
+                                <span class="highlight">{{index+1}}楼 .</span><span>{{item.create_at}}</span>
+                            </div>
+                            <div class="reply-action-group right">
+                                <span class="upvote" @click="upvote(item)"><i class="iconfont icon-upvote"></i>{{item.ups.length}}</span>
+                                <span class="huifu"><i class="iconfont icon-huifu"></i></span>
+
+                            </div>
                         </div>
                         <div class="margin-top" v-html="item.content">
                         </div>
@@ -26,24 +32,33 @@
                 </ul>
             </div>
         </div>
+        <modal :show='showModal' :cancel="closeModal"></modal>
     </div>
-    
+
 </template>
 <script>
 import api from '../constants/api'
 import moment from 'moment'
+import Modal from '../components/modal.vue'
 const {getTopicDetail} = api
+
+moment.locale('zh_cn');
 export default {
+    components:{
+        'modal': Modal
+    },
     data() {
         return {
             loading: false,
-            data: null
+            data: null,
+            showModal:false
         }
     },
     created () {
         this.fetchData()
     },
     methods: {
+        closeModal:()=> this.showModal = !this.showModal,
         fetchData() {
             this.error = this.post = null
             this.loading = true
@@ -51,7 +66,7 @@ export default {
             const self = this
             axios.get(getTopicDetail.url).then((response) => {
                 let data = response.data.data
-                
+
                 self.getTransformedResponse(data)
                 self.data = data
             })
@@ -64,8 +79,17 @@ export default {
                     create_at: moment(item.create_at).fromNow()
                 })
             })
+            // debugger;
             return data;
         },
+        validateLogin(){
+            if(!localStorage.getItem("user")){
+                this.showModal = true;
+            }
+        },
+        upvote(item){
+            this.validateLogin();
+        }
     }
 }
 
@@ -93,9 +117,31 @@ export default {
             &-item {
                 margin-top: 25px;
                 &-header {
+                    vertical-align: middle;
+                    display: inline-block;
+                    width: 100%;
                     img {
-                        width: 25px;
+                        width: 40px;
+                        display: inline-block;
+                        border-radius: 50%;
                         vertical-align: middle;
+                    }
+                    .reply-detail,.reply-action-group{
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+                    .reply-action-group{
+                        .huifu{
+
+                            margin-top: 6px;
+                        }
+                        .iconfont{
+                            font-size: 24px;
+                            margin-right: 10px;
+                        }
+                        .icon-huifu{
+                             font-size: 18px;
+                        }
                     }
                 }
             }

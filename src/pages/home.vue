@@ -21,6 +21,8 @@
         </li>
       </ul>
       <slide-card :show='show' :cancel='handleModal.bind(this,false)'></slide-card>
+
+
   </div>
 
 </template>
@@ -60,7 +62,8 @@ export default {
   components: {
     'nav-head': NavHead,
     'card': Card,
-    'slide-card': SlideCard
+    'slide-card': SlideCard,
+
   },
   props:['tab'],
   data(){
@@ -68,7 +71,8 @@ export default {
       postList: [],
       page: 1,
       initTop: document.scrollTop,
-      show: false
+      show: false,
+      showModal: false
     }
   },
 
