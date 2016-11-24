@@ -20,15 +20,21 @@ function throtte(func,wait,options){
         if( isFirst || (gap = now -lastTime) >= wait ){
             if(isFirst) isFirst = false;
             //leading:false时，不执行，等下一次wait的时间以后
-            if(finalOptions.leading) func.apply(this,arguments);
+            if(finalOptions.leading) {
+                func.apply(this,arguments);
+                lastTime = now;
+            }
         }
         else{
             clearTimeout(funcId);
             //trailing true时才执行。
             if(finalOptions.trailing)
-                funcId = setTimeout(func.bind(this,arguments), wait-gap);
+                funcId = setTimeout(function(){
+                    func.apply(this,arguments);
+                    lastTime = now;
+            }, wait-gap);
         }
-        lastTime = now;
+
 
     }
 
