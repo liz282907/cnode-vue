@@ -1,11 +1,11 @@
 <template>
   <div v-show="show">
-    <div class="layer-shade" @click="cancel"></div>
+    <div class="layer-shade" @click="cancelAction"></div>
     <div class="modal">
-      <p>需要登录账户，是否现在登录？</p>
-      <div>
-        <button @click="cancelLogin">取消</button>
-        <button @click="login">登录</button>
+      <p>该操作需要登录账户，是否现在登录？</p>
+      <div class="right action-group">
+        <button @click="cancelAction" class="highlight">取消</button>
+        <button @click="login" class="highlight">登录</button>
       </div>
     </div>
   </div>
@@ -32,7 +32,9 @@ export default {
     login:()=>{
 
     },
-    cancelLogin:()=> this.cancel(),
+    cancelAction(){
+      this.cancel();
+    },
   }
 };
 </script>
@@ -50,7 +52,7 @@ export default {
     opacity: 0.3;
 }
 .modal{
-  position: absolute;
+  position: fixed;
   z-index: 100;
   top: 50%;
   left: 50%;
@@ -59,6 +61,12 @@ export default {
   padding: 5% 10%;
   border-radius: 4px;
   background-color: white;
+  p{
+    font-family: "Microsoft Yahei"
+  }
+  .action-group{
+    padding-top: 10px;
+  }
 }
 
 </style>
