@@ -7,7 +7,7 @@
             </transition>
             <input type="text" :class="['input',{'input-err': !validInput}]" v-model="accessToken" placeholder="Access Token:" />
             <transition name='errtip'>
-                <span class="error-tip" v-show="!validInput">
+                <span class="error-tip-span" v-show="!validInput">
                 {{server.errTip}}
                 </span>
             </transition>
@@ -44,6 +44,11 @@ export default {
             return this.accessToken
         }
     },
+    watch:{
+        accessToken:function(newInput){
+            this.validInput = true;
+        }
+    },
     beforeRouteEnter(to,from,next){
         next(vm=>{
             vm.fromRoute = from.fullPath;
@@ -53,6 +58,7 @@ export default {
         login(){
             //show loading
             const that = this;
+            const prevToken = this.accessToken;
             axios.post(URLS.postLoginToken.url,{
                 accesstoken: this.accessToken
             })
@@ -63,13 +69,19 @@ export default {
                     // localStorage.setItem('user',JSON.stringify(res.data));
 
                     // const prevRouter = this.$router.
-                    debugger
                     router.replace(that.fromRoute);
+                }
+                else{
+                    that.errTip = res.error_msg;
                 }
 
             })
             .catch(err=>{
-
+                const response = err.response.data;
+                if(!response.success){
+                    that.validInput = !that.accessToken===prevToken;
+                    that.server.errTip = response.error_msg;
+                }
             })
         }
     }
@@ -84,9 +96,6 @@ input{
     border: none;
     background: none;
 }
-
-
-
 
 
 .login{
@@ -163,13 +172,32 @@ input{
 
             }
         }
-        .errtip{
-            margin-bottom: 20px;
-            &-enter-active,&-leave-active{transition: all .3s ease};
-            &-enter,&-leave-active{
-                margin-bottom: 0;
-            }
+        // .errtip{
+        //     // margin-bottom: 20px;
+        //     &-enter-active,&-leave-active{
+        //         // transition: margin-bottom .3s ease;
+        //         transition: all .3s ease;
+        //     };
+        //     &-enter,&-leave-active{
+        //         // margin-bottom: 0;
+        //         display: none;
+        //     }
+
+        // }
+        .error-tip-span{
+            font-size: 12px;
+            color: red;
+            opacity: 1;
         }
+        .errtip-enter-active,.errtip-leave-active{
+                transition: opacity .3s ease;
+            };
+        .errtip-enter,.errtip-leave-active{
+            opacity: 0;
+        }
+
+
+
 
 
 
