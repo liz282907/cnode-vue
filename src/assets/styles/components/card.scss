@@ -29,6 +29,9 @@ span{
     .title{
         @extend .text-primary;
     }
+    time{
+        color: rgba(0, 0, 0, 0.54);
+    }
 }
 h3{
     font-size: 16px;
@@ -43,7 +46,6 @@ h3{
         height: 12%;
         border-radius: 50%;
 
-        border: 1px solid red;
     }
     p{
         .creator{

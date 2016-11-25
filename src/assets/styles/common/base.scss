@@ -29,4 +29,13 @@
     @extend .text-sec;
     background-color: #eee;
 }
-
+.highlight{
+    color: #64DD17;
+}
+//markdown
+.markdown-text {
+    * {
+        max-width: 100%;
+        word-wrap: break-all;
+    }
+}
