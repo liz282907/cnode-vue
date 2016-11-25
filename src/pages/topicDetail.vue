@@ -57,6 +57,9 @@ export default {
     created () {
         this.fetchData()
     },
+    watch:{
+        '$route':'fetchData'
+    },
     methods: {
         closeModal(){
             this.showModal = !this.showModal;
@@ -85,12 +88,20 @@ export default {
             return data;
         },
         validateLogin(){
+            localStorage.removeItem('user');
+            console.log(localStorage.getItem("user"));
             if(!localStorage.getItem("user")){
                 this.showModal = true;
+                return false;
             }
+            return true;
+
         },
         upvote(item){
-            this.validateLogin();
+            if(!this.validateLogin())
+            {
+
+            }
         }
     }
 }

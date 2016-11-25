@@ -12,6 +12,10 @@
 </template>
 
 <script>
+
+import router from '../route.config'
+
+
 export default {
   name: 'modal',
   props:{
@@ -29,8 +33,8 @@ export default {
     };
   },
   methods:{
-    login:()=>{
-
+    login(){
+      router.push({path: '/login'}); //不加/的话是默认在当前路径的基础上添加子路由
     },
     cancelAction(){
       this.cancel();

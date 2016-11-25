@@ -115,7 +115,7 @@ export default {
       // });
       // isDown? this.page++ : this.page--;
       if(check_if_needs_more_content()){
-        console.log("--------------page-----------",this.page);
+        // console.log("--------------page-----------",this.page);
         this.fetchPage(this.page);
         this.page++;
       }
