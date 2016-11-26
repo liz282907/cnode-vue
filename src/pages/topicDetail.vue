@@ -50,7 +50,9 @@ export default {
     data() {
         return {
             loading: false,
-            data: null,
+            data: {
+                author: ''
+            },
             showModal:false
         }
     },
