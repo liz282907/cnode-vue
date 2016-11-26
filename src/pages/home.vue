@@ -75,6 +75,11 @@ export default {
       showModal: false
     }
   },
+  watch:{
+    '$route': ()=>{
+      this.fetchPage(1);
+    }
+  },
 
   beforeCreate(){
     // console.log("---------",this.infiniteScroll);

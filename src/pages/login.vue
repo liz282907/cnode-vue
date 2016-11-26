@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <div class="login-back"><i class="iconfont icon-back"></i>登录</div>
+        <div class="login-back" @click="backToPrev"><i class="iconfont icon-back"></i>登录</div>
         <div class="login-box">
             <transition name='label-show'>
                 <label v-show.lazy="inEdit" >Access Token</label>
@@ -50,11 +50,15 @@ export default {
         }
     },
     beforeRouteEnter(to,from,next){
+        //因为进这个导航hook的时候组件还没有创建，要等异步创建好后把prevRoute传过来
         next(vm=>{
             vm.fromRoute = from.fullPath;
         });
     },
     methods: {
+        backToPrev(){
+            router.go(-1);
+        },
         login(){
             //show loading
             const that = this;

@@ -24,6 +24,8 @@ const Setting = resolve => require(['./pages/setting.vue'],resolve);
 
 const TopicDetail = resolve => require(['./pages/topicDetail'], resolve)
 
+// const TopicDetail = require('./pages/topicDetail');
+
 let routes = [
     {
         path: "/",
