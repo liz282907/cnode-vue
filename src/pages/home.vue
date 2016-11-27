@@ -7,7 +7,7 @@
 
       </div>
       <ul>
-        <li v-for="item in postList">
+        <li v-for="item in postList" :key="item.id">
           <router-link :to="{ name: 'topic', params: { id: item.id }}">
           <card :title="item.title" :tagName="item.tagName" :isTop="item.top" :imgSrc="item.author.avatar_url"
                 :commentCount.number="item.reply_count"
@@ -30,7 +30,7 @@
 import moment from 'moment';
 import NavHead from '../components/header';
 import Card from '../components/card';
-import { throtte,isScrollDown,check_if_needs_more_content } from '../utils/util';
+import { throtte,isScrollDown,check_if_needs_more_content,isObjEmpty } from '../utils/util';
 import SlideCard from '../components/slide-card.vue'
 
 moment.locale("zh-cn");
@@ -59,119 +59,150 @@ let responseDict = {};
 // ]
 
 export default {
-  components: {
-    'nav-head': NavHead,
-    'card': Card,
-    'slide-card': SlideCard,
+    name:'Home',
+    components: {
+        'nav-head': NavHead,
+        'card': Card,
+        'slide-card': SlideCard,
 
-  },
-  props:['tab'],
-  data(){
-    return {
-      postList: [],
-      page: 1,
-      initTop: document.documentElement.scrollTop,
-      show: false,
-      showModal: false
-    }
-  },
-  watch:{
-    '$route': ()=>{
-      console.log(arguments);
-      //not working
-      this.reset();
-      this.fetchPage(1);
-    }
-  },
-
-  beforeCreate(){
-    // console.log("---------",this.infiniteScroll);
-    // this.infiniteScroll = this.infiniteScroll.bind(this);
-    // window.addEventListener("scroll",this.infiniteScroll);
-  },
-
-  created(){
-
-    // this.reset();
-    this.fetchPage(this.page);
-    this.infiniteScroll = throtte(this.fetchWhenScroll.bind(this),1000);
-    // this.infiniteScroll = this.infiniteScroll.bind(this);
-    window.addEventListener("scroll",this.infiniteScroll);
-
-  },
-  mounted(){
-    // console.log("-----test mount");
-  },
-  beforeDestroy(){
-    console.log("beforeDestroy");
-    window.removeEventListener("scroll",this.infiniteScroll);
-  },
-  destroyed(){
-    console.log("destroyed");
-  },
-
-  methods:{
-
-    reset(){
-      //路由回退后清空缓存数据。
-      responseDict = {};
-      this.page = 1;
+    },
+    props: ['tab'],
+    data() {
+        return {
+            postList: [],
+            page: 1,
+            initTop: document.documentElement.scrollTop,
+            show: false,
+            showModal: false,
+            fromRoute:''
+        }
+    },
+    watch: {
+        '$route': () => {
+            // this.reset();
+            // this.fetchPage(1);
+        }
     },
 
-    infiniteScroll(e){
-        return throtte(this.fetchWhenScroll.bind(this),1000);
+    //在route里面赋值，为create里面的数据到底是获取还是用缓存数据做区分
+    beforeRouteEnter(to, from, next) {
+        if (from.fullPath.indexOf('topic') !== -1) {
+            next(vm=>{
+                vm.fromRoute = from.fullPath;
+            });
+          }
+        else
+          next(vm=> vm.fromRoute = '');
+
     },
-    getTransformedResponse(prevResponse){
-      return prevResponse.data.map(item=>{
-        // debugger;
-        item.create_at = moment(item.create_at).format("YYYY-MM-DD HH:mm");
-        item.last_reply_at = moment(item.last_reply_at).fromNow();
-
-        return item;
-      })
-    },
-
-
-    fetchWhenScroll(){
-/*
-      let isDown = isScrollDown(this.initTop,(curTop)=>{
-        this.initTop = curTop;
-      });
-      isDown? this.page++ : this.page--;
-      this.fetchPage(this.page);
-*/
-      if(check_if_needs_more_content()){
-        // console.log("--------------page-----------",this.page);
-        this.fetchPage(this.page);
-        this.page++;
+    beforeRouteLeave(to,from,next){
+      //记录上次的scrollTop
+      if(to.name==='topic'){
+        const scrollTop = document.body.scrollTop||document.documentElement.scrollTop;
+        localStorage.setItem('scrollTop',JSON.stringify(scrollTop));
+        localStorage.setItem('tab',JSON.stringify(this.tab));
+        localStorage.setItem('postList',JSON.stringify(this.postList));
       }
+
+      next();
     },
 
-    fetchPage(page){
-      console.log(responseDict);
-      if(responseDict[page]) return;
 
-      axios.get('https://cnodejs.org/api/v1/topics',{
-          params:{
-            page,
-            tab: 'good',
-            limit
-          }
-        })
-      .then(response=>{
-          if(response.data){
-            const appendedList = this.getTransformedResponse(response.data);
-            responseDict[page] = appendedList;
-            this.postList = [...this.postList,...appendedList];
-          }
-
-      })
-      .catch(err=> console.log(err));
+    beforeCreate() {
     },
-    handleModal(value) {
-      this.show = value;
+
+    created() {
+
+
+    },
+    mounted() {
+        //从详情页返回
+        if(!localStorage.getItem('postList')) this.fetchPage(this.page);
+        else
+        {
+
+          // this.postList = Object.keys(responseDict).map(index=>responseDict[index]);
+
+          this.postList = JSON.parse(localStorage.getItem('postList'));
+          window.scroll(0,JSON.parse(localStorage.getItem('scrollTop')));
+          // this.$nextTick(()=> window.scroll(0,JSON.parse(localStorage.getItem('scrollTop'))));
+        }
+
+        this.infiniteScroll = throtte(this.fetchWhenScroll.bind(this), 300);
+          // this.infiniteScroll = this.infiniteScroll.bind(this);
+        window.addEventListener("scroll", this.infiniteScroll);
+    },
+    beforeUpdate(){
+      console.log(arguments);
+    },
+    beforeDestroy() {
+        window.removeEventListener("scroll", this.infiniteScroll);
+    },
+    destroyed() {
+        console.log("destroyed");
+    },
+
+    methods: {
+
+        reset() {
+            //路由回退后清空缓存数据。
+            responseDict = {};
+            this.page = 1;
+        },
+
+        // infiniteScroll(e){
+        //     return throtte(this.fetchWhenScroll.bind(this),1000);
+        // },
+        getTransformedResponse(prevResponse) {
+            return prevResponse.data.map(item => {
+                // debugger;
+                item.create_at = moment(item.create_at).format("YYYY-MM-DD HH:mm");
+                item.last_reply_at = moment(item.last_reply_at).fromNow();
+
+                return item;
+            })
+        },
+
+
+        fetchWhenScroll() {
+            /*
+                  let isDown = isScrollDown(this.initTop,(curTop)=>{
+                    this.initTop = curTop;
+                  });
+                  isDown? this.page++ : this.page--;
+                  this.fetchPage(this.page);
+            */
+            if (check_if_needs_more_content()) {
+                // console.log("--------------page-----------",this.page);
+                this.fetchPage(this.page);
+                this.page++;
+            }
+        },
+
+        fetchPage(page) {
+            if (responseDict[page]) return;
+
+            axios.get('https://cnodejs.org/api/v1/topics', {
+                    params: {
+                        page,
+                        tab: 'good',
+                        limit
+                    }
+                })
+                .then(response => {
+                    if (response.data) {
+                        const appendedList = this.getTransformedResponse(response.data);
+                        responseDict[page] = appendedList;
+                        this.postList = [...this.postList, ...appendedList];
+                    }
+
+                })
+                .catch(err => console.log(err));
+        },
+        handleModal(value) {
+            this.show = value;
+        }
     }
-  }
 
 };
 </script>

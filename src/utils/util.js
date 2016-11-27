@@ -101,4 +101,7 @@ function check_if_needs_more_content(){
     }
 
 
-export { throtte,isScrollDown, check_if_needs_more_content};
+function isObjEmpty(obj){
+    return Object.keys(obj).length===0;
+}
+export { throtte,isScrollDown, check_if_needs_more_content,isObjEmpty};
