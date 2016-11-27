@@ -54,7 +54,9 @@ export default {
     data() {
         return {
             loading: false,
-            data: {},
+            data: {
+                author:{}
+            },
             showModal:false
         }
     },
@@ -120,7 +122,7 @@ export default {
 <style lang="scss">
     .page {
         padding: 10px;
-        // margin-top: 54px;
+        margin-top: 54px;
         &-header {
             padding: 10px;
             line-height: 25px;
