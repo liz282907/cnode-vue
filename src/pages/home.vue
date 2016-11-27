@@ -94,15 +94,20 @@ export default {
 
     // this.reset();
     this.fetchPage(this.page);
-    this.infiniteScroll = this.infiniteScroll.bind(this);
-    window.addEventListener("scroll",this.infiniteScroll());
+    this.infiniteScroll = throtte(this.fetchWhenScroll.bind(this),1000);
+    // this.infiniteScroll = this.infiniteScroll.bind(this);
+    window.addEventListener("scroll",this.infiniteScroll);
 
   },
   mounted(){
     // console.log("-----test mount");
   },
   beforeDestroy(){
-    window.removeEventListener("scroll",this.infiniteScroll());
+    console.log("beforeDestroy");
+    window.removeEventListener("scroll",this.infiniteScroll);
+  },
+  destroyed(){
+    console.log("destroyed");
   },
 
   methods:{
