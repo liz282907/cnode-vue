@@ -178,6 +178,7 @@ export default {
                 // debugger;
                 item.create_at = moment(item.create_at).format("YYYY-MM-DD HH:mm");
                 item.last_reply_at = moment(item.last_reply_at).fromNow();
+                item.tagName = item.top?'置顶':getTabName(item.tab);
 
                 return item;
             })

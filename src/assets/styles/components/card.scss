@@ -28,6 +28,10 @@ span{
     }
     .title{
         @extend .text-primary;
+        width: 80%;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
     }
     time{
         color: rgba(0, 0, 0, 0.54);

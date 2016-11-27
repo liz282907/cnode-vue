@@ -28,9 +28,14 @@
     padding: 0.066667rem 0;
     @extend .text-sec;
     background-color: #eee;
+    border-radius: 3px;
 }
 .highlight{
     color: #64DD17;
+}
+.tag-highlight{
+    background-color: #64DD17;
+    color: white;
 }
 //markdown
 .markdown-text {
