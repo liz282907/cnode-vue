@@ -77,6 +77,9 @@ export default {
   },
   watch:{
     '$route': ()=>{
+      console.log(arguments);
+      //not working
+      this.reset();
       this.fetchPage(1);
     }
   },
@@ -86,20 +89,30 @@ export default {
     // this.infiniteScroll = this.infiniteScroll.bind(this);
     // window.addEventListener("scroll",this.infiniteScroll);
   },
+
   created(){
 
-    this.fetchPage(1);
+    // this.reset();
+    this.fetchPage(this.page);
     this.infiniteScroll = this.infiniteScroll.bind(this);
     window.addEventListener("scroll",this.infiniteScroll());
 
   },
   mounted(){
+    // console.log("-----test mount");
   },
   beforeDestroy(){
     window.removeEventListener("scroll",this.infiniteScroll());
   },
 
   methods:{
+
+    reset(){
+      //路由回退后清空缓存数据。
+      responseDict = {};
+      this.page = 1;
+    },
+
     infiniteScroll(e){
         return throtte(this.fetchWhenScroll.bind(this),1000);
     },
@@ -127,6 +140,7 @@ export default {
     },
 
     fetchPage(page){
+      console.log(responseDict);
       if(responseDict[page]) return;
 
       axios.get('https://cnodejs.org/api/v1/topics',{

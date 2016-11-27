@@ -47,6 +47,7 @@ export default {
     components:{
         'modal': Modal
     },
+    name:'detail',
     data() {
         return {
             loading: false,
