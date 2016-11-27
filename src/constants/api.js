@@ -4,5 +4,10 @@ export default {
         get url () {
             return baseUrl + 'topic/' + this.id
         }
-    } 
+    },
+    postLoginToken: {
+        get url () {
+            return baseUrl + 'accesstoken'
+        }
+    }
 }

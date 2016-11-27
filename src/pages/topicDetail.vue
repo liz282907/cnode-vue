@@ -47,16 +47,27 @@ export default {
     components:{
         'modal': Modal
     },
+    name:'detail',
     data() {
         return {
             loading: false,
-            data: null,
+            data: {},
             showModal:false
         }
     },
     created () {
         this.fetchData()
     },
+    watch:{
+        '$route':'fetchData'
+    },
+    // beforeRouteEnter(to,from,next){
+    //     //因为进这个导航hook的时候组件还没有创建，要等异步创建好后把prevRoute传过来
+    //     next(vm=>{
+    //         debugger;
+    //         vm.fromRoute = from.fullPath;
+    //     });
+    // },
     methods: {
         closeModal(){
             this.showModal = !this.showModal;
@@ -68,7 +79,6 @@ export default {
             const self = this
             axios.get(getTopicDetail.url).then((response) => {
                 let data = response.data.data
-
                 self.getTransformedResponse(data)
                 self.data = data
             })
@@ -85,12 +95,20 @@ export default {
             return data;
         },
         validateLogin(){
+            localStorage.removeItem('user');
+            console.log(localStorage.getItem("user"));
             if(!localStorage.getItem("user")){
                 this.showModal = true;
+                return false;
             }
+            return true;
+
         },
         upvote(item){
-            this.validateLogin();
+            if(!this.validateLogin())
+            {
+
+            }
         }
     }
 }

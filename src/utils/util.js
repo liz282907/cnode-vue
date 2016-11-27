@@ -92,6 +92,10 @@ function check_if_needs_more_content(){
     const windowHeight = window.innerHeight  || document.documentElement.clientHeight;
       let distanceToDocBottom = docHeight-windowHeight-scrollTop;
 
+      // console.log("------document  ",docHeight);
+      // console.log("------windowHeight ",windowHeight);
+      // console.log("------scrollTop ",scrollTop);
+      // console.log("------distanceToDocBottom ",distanceToDocBottom);
       if(Math.abs(distanceToDocBottom)<300) return true;
       return false;
     }

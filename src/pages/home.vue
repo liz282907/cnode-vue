@@ -75,26 +75,44 @@ export default {
       showModal: false
     }
   },
+  watch:{
+    '$route': ()=>{
+      console.log(arguments);
+      //not working
+      this.reset();
+      this.fetchPage(1);
+    }
+  },
 
   beforeCreate(){
     // console.log("---------",this.infiniteScroll);
     // this.infiniteScroll = this.infiniteScroll.bind(this);
     // window.addEventListener("scroll",this.infiniteScroll);
   },
+
   created(){
 
-    this.fetchPage(1);
+    // this.reset();
+    this.fetchPage(this.page);
     this.infiniteScroll = this.infiniteScroll.bind(this);
     window.addEventListener("scroll",this.infiniteScroll());
 
   },
   mounted(){
+    // console.log("-----test mount");
   },
   beforeDestroy(){
     window.removeEventListener("scroll",this.infiniteScroll());
   },
 
   methods:{
+
+    reset(){
+      //路由回退后清空缓存数据。
+      responseDict = {};
+      this.page = 1;
+    },
+
     infiniteScroll(e){
         return throtte(this.fetchWhenScroll.bind(this),1000);
     },
@@ -110,19 +128,22 @@ export default {
 
 
     fetchWhenScroll(){
+/*
       let isDown = isScrollDown(this.initTop,(curTop)=>{
         this.initTop = curTop;
       });
       isDown? this.page++ : this.page--;
       this.fetchPage(this.page);
-      // if(check_if_needs_more_content()){
-      //   console.log("--------------page-----------",this.page);
-      //   this.fetchPage(this.page);
-      //   this.page++;
-      // }
+*/
+      if(check_if_needs_more_content()){
+        // console.log("--------------page-----------",this.page);
+        this.fetchPage(this.page);
+        this.page++;
+      }
     },
 
     fetchPage(page){
+      console.log(responseDict);
       if(responseDict[page]) return;
 
       axios.get('https://cnodejs.org/api/v1/topics',{
