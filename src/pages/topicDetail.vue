@@ -1,5 +1,6 @@
 <template>
     <div>
+        <header-bar title="话题"></header-bar>
         <div class="page">
             <h2 class="page-header">{{data.title}}</h2>
             <div class="page-author">
@@ -40,11 +41,13 @@
 import api from '../constants/api'
 import moment from 'moment'
 import Modal from '../components/modal.vue'
+import HeaderBar from '../components/header-bar'
 const {getTopicDetail} = api
 
 moment.locale('zh_cn');
 export default {
     components:{
+        'header-bar': HeaderBar,
         'modal': Modal
     },
     name:'detail',
@@ -117,6 +120,7 @@ export default {
 <style lang="scss">
     .page {
         padding: 10px;
+        // margin-top: 54px;
         &-header {
             padding: 10px;
             line-height: 25px;

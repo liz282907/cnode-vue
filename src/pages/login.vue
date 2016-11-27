@@ -1,6 +1,6 @@
 <template>
     <div class="login">
-        <div class="login-back" @click="backToPrev"><i class="iconfont icon-back"></i>登录</div>
+        <header-bar title="登录"></header-bar>
         <div class="login-box">
             <transition name='label-show'>
                 <label v-show.lazy="inEdit" >Access Token</label>
@@ -23,11 +23,15 @@
 
 </template>
 <script>
+
+import HeaderBar from '../components/header-bar';
+
 import URLS from '../constants/api'
 import router from '../route.config'
 
 export default {
     components:{
+        'header-bar': HeaderBar
     },
     data() {
         return {
@@ -107,14 +111,8 @@ input{
     width: 100%;
     height: 100%;
     display: block;
-    padding: 5%;
+    // padding: 5%;
     // border: 1px solid red;
-    &-back{
-        font-family: "Microsoft Yahei";
-        .icon-back{
-            margin-right: 10px;
-        }
-    }
     &-box{
         width: 80%;
         padding: 8%;

@@ -13,29 +13,19 @@
                 </div>
                 <div class="split-line"></div>
                 <ul class="link-list">
-                    <li>
-                        <i class="iconfont icon-login"></i>
-                        <span>全部</span>
+                    <li v-for="item in navData">
+                        <router-link :to="{path:'/',query:{tab: item.tab}}">
+                            <i :class="['iconfont','icon-'+item.icon]"></i>
+                            <span class="tab">{{item.name}}</span>
+                        </router-link>
                     </li>
-                    <li>
-                        <i class="iconfont icon-login"></i>
-                        <span>精华</span>
-                    </li>
-                    <li>
-                        <i class="iconfont icon-login"></i>
-                        <span>分享</span>
-                    </li>
-                    <li class="border-bottom">
-                        <i class="iconfont icon-login"></i>
-                        <span>招聘</span>
-                    </li>
-                    <li>
-                        <i class="iconfont icon-login"></i>
-                        <span>消息</span>
-                    </li>
-                    <li>
-                        <i class="iconfont icon-login"></i>
-                        <span>关于</span>
+                </ul>
+                <ul class="column-list">
+                    <li v-for="item in columnList">
+                        <router-link :to="{path: item.path}">
+                            <i :class="['iconfont','icon-'+item.icon]"></i>
+                            <span class="tab">{{item.name}}</span>
+                        </router-link>
                     </li>
                 </ul>
             </section>
@@ -43,11 +33,15 @@
     </transition>
 </template>
 <script>
+import { navData, columnList } from '../constants/config'
+
 export default {
     name: 'slideCard',
     data () {
         return {
             // modalShow: this.show
+            navData,
+            columnList
         }
     },
     // created: function() {
@@ -123,13 +117,15 @@ export default {
         }
 
     }
-    .link-list {
+    .link-list,.column-list {
+        border-bottom: 1px solid #d4d4d4;
         li {
-            line-height: 40px;
+            line-height: 45px;
         }
-        .border-bottom {
-            border-bottom: 1px solid #d4d4d4;
-        }
+    }
+    .iconfont{
+        vertical-align: middle;
+        font-size: 20px;
     }
     .layer-shade {
         position: fixed;
@@ -140,6 +136,16 @@ export default {
         height: 100%;
         background-color: #000;
         opacity: 0.3;
+    }
+    .tab{
+        margin-left: 2em;
+    }
+    a{
+        width: 100%;
+        vertical-align: middle;
+        display: inline-block;
+        color: rgba(0,0,0,0.54);
+        font-size: 16px;
     }
 
 </style>

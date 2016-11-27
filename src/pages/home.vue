@@ -3,7 +3,7 @@
       <nav-head></nav-head>
       <div class="nav-bar">
         <span><i class="iconfont nav-img" @click='show=true'>&#xe745;</i></span>
-        <h1>{{tab}}</h1>
+        <h1>{{title}}</h1>
 
       </div>
       <ul>
@@ -30,8 +30,10 @@
 import moment from 'moment';
 import NavHead from '../components/header';
 import Card from '../components/card';
-import { throtte,isScrollDown,check_if_needs_more_content,isObjEmpty } from '../utils/util';
 import SlideCard from '../components/slide-card.vue'
+
+import { throtte,isScrollDown,check_if_needs_more_content,isObjEmpty } from '../utils/util';
+import { getTabName } from '../constants/config';
 
 moment.locale("zh-cn");
 
@@ -66,26 +68,40 @@ export default {
         'slide-card': SlideCard,
 
     },
-    props: ['tab'],
+    // props: ['tab'],
     data() {
         return {
             postList: [],
             page: 1,
-            initTop: document.documentElement.scrollTop,
+            // initTop: document.documentElement.scrollTop,
             show: false,
             showModal: false,
-            fromRoute:''
+            // fromRoute:'',
+            tab: 'all'
         }
     },
+    computed:{
+      title(){
+        return getTabName(this.tab);
+      }
+    },
     watch: {
-        '$route': () => {
-            // this.reset();
-            // this.fetchPage(1);
+        '$route'(to,from) {
+            //监听tab导致的路由变动
+            if(to.query && to.query.tab){
+              this.tab = to.query.tab;
+              this.show = false;
+              //reset localStorage
+              this.reset();
+              this.fetchPage(this.page);
+            }
         }
     },
 
     //在route里面赋值，为create里面的数据到底是获取还是用缓存数据做区分
     beforeRouteEnter(to, from, next) {
+        debugger;
+        //从详情页回来
         if (from.fullPath.indexOf('topic') !== -1) {
             next(vm=>{
                 vm.fromRoute = from.fullPath;
@@ -148,6 +164,10 @@ export default {
             //路由回退后清空缓存数据。
             responseDict = {};
             this.page = 1;
+            this.postList = [];
+            localStorage.removeItem('postList');
+            localStorage.removeItem('scrollTop');
+            localStorage.removeItem('tab');
         },
 
         // infiniteScroll(e){
@@ -185,7 +205,7 @@ export default {
             axios.get('https://cnodejs.org/api/v1/topics', {
                     params: {
                         page,
-                        tab: 'good',
+                        tab: this.tab,
                         limit
                     }
                 })
