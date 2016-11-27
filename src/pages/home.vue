@@ -71,7 +71,7 @@ export default {
       postList: [],
       page: 1,
       initTop: document.documentElement.scrollTop,
-      show: false
+      show: false,
       showModal: false
     }
   },
