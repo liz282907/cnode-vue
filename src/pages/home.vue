@@ -100,7 +100,6 @@ export default {
 
     //在route里面赋值，为create里面的数据到底是获取还是用缓存数据做区分
     beforeRouteEnter(to, from, next) {
-        debugger;
         //从详情页回来
         if (from.fullPath.indexOf('topic') !== -1) {
             next(vm=>{
