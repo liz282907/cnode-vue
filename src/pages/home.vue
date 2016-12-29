@@ -30,15 +30,19 @@
 import moment from 'moment';
 import NavHead from '../components/header';
 import Card from '../components/card';
-import SlideCard from '../components/slide-card.vue'
+import SlideCard from '../components/slide-card'
 
 import { throtte,isScrollDown,check_if_needs_more_content,isObjEmpty } from '../utils/util';
 import { getTabName } from '../constants/config';
 
+import { mapGetters,mapActions,mapMutations } from 'vuex'
+import * as types from '../store/mutation-types'
+
+
 moment.locale("zh-cn");
 
-const limit = 10;
-let responseDict = {};
+// const limit = 10;
+// let responseDict = {};
 
 // const postList = [
 //   {
@@ -69,19 +73,26 @@ export default {
 
     },
     // props: ['tab'],
-    data() {
-        return {
-            postList: [],
-            page: 1,
-            // initTop: document.documentElement.scrollTop,
-            show: false,
-            showModal: false,
-            // fromRoute:'',
-            tab: 'all'
-        }
-    },
+    // data() {
+    //     return {
+    //         postList: [],
+    //         page: 1,
+    //         // initTop: document.documentElement.scrollTop,
+    //         show: false,
+    //         showModal: false,
+    //         // fromRoute:'',
+    //         tab: 'all'
+    //     }
+    // },
     computed:{
+      ...mapGetters({
+        tab,
+        postList,
+        showSlide,
+        page: 'postPage'
+      }),
       title(){
+        // console.log("----------",this.tab);
         return getTabName(this.tab);
       }
     },
@@ -89,11 +100,9 @@ export default {
         '$route'(to,from) {
             //监听tab导致的路由变动
             if(to.query && to.query.tab){
-              this.tab = to.query.tab;
-              this.show = false;
-              //reset localStorage
-              this.reset();
-              this.fetchPage(this.page);
+              this.$store.dispatch('changeTab',to.query.tab).then(()=>{
+                this.reset();
+              })
             }
         }
     },
@@ -114,11 +123,10 @@ export default {
       //记录上次的scrollTop
       if(to.name==='topic'){
         const scrollTop = document.body.scrollTop||document.documentElement.scrollTop;
-        localStorage.setItem('scrollTop',JSON.stringify(scrollTop));
-        localStorage.setItem('tab',JSON.stringify(this.tab));
-        localStorage.setItem('postList',JSON.stringify(this.postList));
+        this.$store.dispatch('setStorage',{
+          scrollTop: JSON.stringify(scrollTop)
+        })
       }
-
       next();
     },
 
@@ -132,16 +140,9 @@ export default {
     },
     mounted() {
         //从详情页返回
-        if(!localStorage.getItem('postList')) this.fetchPage(this.page);
+        if(!localStorage.getItem('postList')) this.$store.dispatch('scrollToPage',1);
         else
-        {
-
-          // this.postList = Object.keys(responseDict).map(index=>responseDict[index]);
-
-          this.postList = JSON.parse(localStorage.getItem('postList'));
-          window.scroll(0,JSON.parse(localStorage.getItem('scrollTop')));
-          // this.$nextTick(()=> window.scroll(0,JSON.parse(localStorage.getItem('scrollTop'))));
-        }
+          this.recover();
 
         this.infiniteScroll = throtte(this.fetchWhenScroll.bind(this), 300);
           // this.infiniteScroll = this.infiniteScroll.bind(this);
@@ -158,32 +159,18 @@ export default {
     },
 
     methods: {
-
-        reset() {
-            //路由回退后清空缓存数据。
-            responseDict = {};
-            this.page = 1;
-            this.postList = [];
-            localStorage.removeItem('postList');
-            localStorage.removeItem('scrollTop');
-            localStorage.removeItem('tab');
-        },
-
+        ...mapActions([
+          'scrollToPage',
+          'recover',
+          'reset'
+        ]),
+        ...mapMutations([
+          types.INCRE_POSTPAGE,
+          types.TOGGLE_SLIDE
+        ]),
         // infiniteScroll(e){
         //     return throtte(this.fetchWhenScroll.bind(this),1000);
         // },
-        getTransformedResponse(prevResponse) {
-            return prevResponse.data.map(item => {
-                // debugger;
-                item.create_at = moment(item.create_at).format("YYYY-MM-DD HH:mm");
-                item.last_reply_at = moment(item.last_reply_at).fromNow();
-                item.tagName = item.top?'置顶':getTabName(item.tab);
-
-                return item;
-            })
-        },
-
-
         fetchWhenScroll() {
             /*
                   let isDown = isScrollDown(this.initTop,(curTop)=>{
@@ -193,34 +180,12 @@ export default {
                   this.fetchPage(this.page);
             */
             if (check_if_needs_more_content()) {
-                // console.log("--------------page-----------",this.page);
-                this.fetchPage(this.page);
-                this.page++;
+                this.scrollToPage(this.page);
+                [types.INCRE_POSTPAGE]();
             }
         },
-
-        fetchPage(page) {
-            if (responseDict[page]) return;
-
-            axios.get('https://cnodejs.org/api/v1/topics', {
-                    params: {
-                        page,
-                        tab: this.tab,
-                        limit
-                    }
-                })
-                .then(response => {
-                    if (response.data) {
-                        const appendedList = this.getTransformedResponse(response.data);
-                        responseDict[page] = appendedList;
-                        this.postList = [...this.postList, ...appendedList];
-                    }
-
-                })
-                .catch(err => console.log(err));
-        },
         handleModal(value) {
-            this.show = value;
+          [types.TOGGLE_SLIDE](value);
         }
     }
 
