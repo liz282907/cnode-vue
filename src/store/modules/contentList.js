@@ -79,7 +79,7 @@ const mutations = {
 const actions = {
     scrollToPage({commit,state,rootState},page=1){
         if(!responseDict[state.page]) return;
-
+        debugger
         commit(types.FETCH_POSTLIST,page);
         axios.get('https://cnodejs.org/api/v1/topics', {
                     params: {

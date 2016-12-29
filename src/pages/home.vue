@@ -20,7 +20,7 @@
           </router-link>
         </li>
       </ul>
-      <slide-card :show='show' :cancel='handleModal.bind(this,false)'></slide-card>
+      <slide-card :show='showSlide' :cancel='handleModal.bind(this,false)'></slide-card>
 
 
   </div>
@@ -86,9 +86,9 @@ export default {
     // },
     computed:{
       ...mapGetters({
-        tab,
-        postList,
-        showSlide,
+        tab: 'tab',
+        postList: 'postList',
+        showSlide: 'showSlide',
         page: 'postPage'
       }),
       title(){
@@ -140,7 +140,8 @@ export default {
     },
     mounted() {
         //从详情页返回
-        if(!localStorage.getItem('postList')) this.$store.dispatch('scrollToPage',1);
+        // debugger
+        if(!localStorage.getItem('postList')) this.scrollToPage(1);
         else
           this.recover();
 

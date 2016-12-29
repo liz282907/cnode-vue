@@ -30,13 +30,13 @@ const actions = {
     }
 }
 
-const store = new Vuex.Store({
-    state,
-    getters,
-    mutations,
-    actions,
+export default new Vuex.Store({
     modules:{
         contentList,
         detail
-    }
+    },
+    state,
+    getters,
+    mutations,
+    actions
 })
