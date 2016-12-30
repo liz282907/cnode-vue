@@ -2,7 +2,7 @@
   <div>
       <nav-head></nav-head>
       <div class="nav-bar">
-        <span><i class="iconfont nav-img" @click='show=true'>&#xe745;</i></span>
+        <span><i class="iconfont nav-img" @click='toggleSlide'>&#xe745;</i></span>
         <h1>{{title}}</h1>
 
       </div>
@@ -20,7 +20,7 @@
           </router-link>
         </li>
       </ul>
-      <slide-card :show='showSlide' :cancel='handleModal.bind(this,false)'></slide-card>
+      <slide-card :show='showSlide' :cancel='handleModal(false)'></slide-card>
 
 
   </div>
@@ -85,16 +85,14 @@ export default {
     //     }
     // },
     computed:{
+      ...mapGetters(['tabName','postList','showSlide']),
       ...mapGetters({
-        tab: 'tab',
-        postList: 'postList',
-        showSlide: 'showSlide',
         page: 'postPage'
       }),
       title(){
         // console.log("----------",this.tab);
-        return getTabName(this.tab);
-      }
+        return this.tabName;
+      },
     },
     watch: {
         '$route'(to,from) {
@@ -119,16 +117,16 @@ export default {
           next(vm=> vm.fromRoute = '');
 
     },
-    beforeRouteLeave(to,from,next){
-      //记录上次的scrollTop
-      if(to.name==='topic'){
-        const scrollTop = document.body.scrollTop||document.documentElement.scrollTop;
-        this.$store.dispatch('setStorage',{
-          scrollTop: JSON.stringify(scrollTop)
-        })
-      }
-      next();
-    },
+    // beforeRouteLeave(to,from,next){
+    //   //记录上次的scrollTop
+    //   if(to.name==='topic'){
+    //     const scrollTop = document.body.scrollTop||document.documentElement.scrollTop;
+    //     this.$store.dispatch('setStorage',{
+    //       scrollTop: JSON.stringify(scrollTop)
+    //     })
+    //   }
+    //   next();
+    // },
 
 
     beforeCreate() {
@@ -141,10 +139,13 @@ export default {
     mounted() {
         //从详情页返回
         // debugger
-        console.log(this.$store)
-        if(!localStorage.getItem('postList')) this.scrollToPage(1);
-        else
-          this.recover();
+        // // localStorage.removeItem('postList');
+        // localStorage.removeItem('scrollTop');
+        // console.log(" home mounted ")
+        // if(!localStorage.getItem('postList')) this.scrollToPage(1);
+        // else
+        //   this.recover();
+        if(!this.postList.length) this.scrollToPage(1);
 
         this.infiniteScroll = throtte(this.fetchWhenScroll.bind(this), 300);
           // this.infiniteScroll = this.infiniteScroll.bind(this);
@@ -170,6 +171,9 @@ export default {
           types.INCRE_POSTPAGE,
           types.TOGGLE_SLIDE
         ]),
+        toggleSlide(){
+          this[types.TOGGLE_SLIDE]();
+        },
         // infiniteScroll(e){
         //     return throtte(this.fetchWhenScroll.bind(this),1000);
         // },
@@ -183,11 +187,11 @@ export default {
             */
             if (check_if_needs_more_content()) {
                 this.scrollToPage(this.page);
-                [types.INCRE_POSTPAGE]();
+                this[types.INCRE_POSTPAGE]();
             }
         },
         handleModal(value) {
-          [types.TOGGLE_SLIDE](value);
+          this[types.TOGGLE_SLIDE](value);
         }
     }
 

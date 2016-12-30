@@ -21,13 +21,16 @@ const utils = {
 
 const state = {
     postPage:1,
-    postList: [],
+    count: 0,
+    scrollTop: 0,
+    // pageList: [],
+    // postList: [],
     showSlide: false,
     responseDict: {}
 }
 
 const getters = {
-    postList: state => state.postList,
+    // postList: state => state.postList,
     postPage: state => state.postPage,
     showSlide: state => state.showSlide
 
@@ -35,19 +38,18 @@ const getters = {
 
 const mutations = {
     [types.FETCH_POSTLIST](state,page){
+        // state.pageList.push(page);
         state.postPage = page;
     },
     [types.FETCH_SUCCESS](state,{data}){
         if (data.length) {
             responseDict[state.postPage] = true;
-
-            const appendedList = utils.getTransformedResponse(data);
-            // responseDict[state.postPage] = appendedList;
-            state.postList = [...state.postList, ...appendedList];
+            state.count += data.length;
+            // state.postList = [...state.postList, ...data];
         }
     },
     [types.FETCH_ERROR](state,err){
-        responseDict[state.page] = false;
+        responseDict[state.postPage] = false;
         console.log(`获取第${state.postPage}页列表数据失败`,err);
     },
     [types.RESET_PAGE](state){
@@ -56,22 +58,27 @@ const mutations = {
         state.showSlide = false;
         responseDict = {};
 
-        localStorage.removeItem('postList');
-        localStorage.removeItem('scrollTop');
+        // localStorage.removeItem('postList');
+        // localStorage.removeItem('scrollTop');
     },
     [types.SET_STORAGE](state,{scrollTop}){
         localStorage.setItem('scrollToPage',JSON.stringify(scrollTop));
         localStorage.setItem('postList',JSON.stringify(state.postList));
     },
     [types.RECOVER](state){
-        state.postList = JSON.parse(localStorage.getItem('postList'));
-        window.scroll(0,JSON.parse(localStorage.getItem('scrollTop')));
+        // state.postList = JSON.parse(localStorage.getItem('postList'));
+        // window.scroll(0,JSON.parse(localStorage.getItem('scrollTop')));
     },
     [types.INCRE_POSTPAGE](state){
-        state.page++;
+        state.postPage++;
     },
-    [types.TOGGLE_SLIDE](state,{newState}){
-        state.showSlide = newState;
+    [types.TOGGLE_SLIDE](state){
+        if(arguments[1]!==undefined){
+            const newState = arguments[1];
+            state.showSlide = newState;
+        }
+        else
+            state.showSlide = !state.showSlide;
     }
 
 }
@@ -97,10 +104,10 @@ const actions = {
     reset({commit,state,dispatch}){
         //分发给根组件，改变tab值
         commit(types.RESET_PAGE);
-        dispatch('scrollToPage');
+        // dispatch('scrollToPage');
     },
     setStorage({commit},payload){
-        commit(types.SET_STORAGE,payload);
+        // commit(types.SET_STORAGE,payload);
     },
     recover({commit}){
         commit(types.RECOVER);
