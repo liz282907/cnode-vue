@@ -1,5 +1,6 @@
 import * as types from '../mutation-types'
 import moment from 'moment'
+import { getTabName } from '../../constants/config';
 moment.locale("zh-cn");
 
 
@@ -33,15 +34,15 @@ const getters = {
 }
 
 const mutations = {
-    [types.FETCH_POSTLIST](state,{page}){
+    [types.FETCH_POSTLIST](state,page){
         state.postPage = page;
     },
     [types.FETCH_SUCCESS](state,{data}){
-        if (data) {
-            responseDict[state.page] = true;
+        if (data.length) {
+            responseDict[state.postPage] = true;
 
             const appendedList = utils.getTransformedResponse(data);
-            responseDict[page] = appendedList;
+            // responseDict[state.postPage] = appendedList;
             state.postList = [...state.postList, ...appendedList];
         }
     },
@@ -78,18 +79,18 @@ const mutations = {
 
 const actions = {
     scrollToPage({commit,state,rootState},page=1){
-        if(!responseDict[state.page]) return;
-        debugger
+        if(responseDict[page]) return;
         commit(types.FETCH_POSTLIST,page);
         axios.get('https://cnodejs.org/api/v1/topics', {
                     params: {
-                        page: state.postPage,
+                        page,
                         tab: rootState.tab,
                         limit
                     }
                 })
                 .then(response => {
-                    commit("FETCH_SUCCESS",response)
+                    console.log(response.data)
+                    commit("FETCH_SUCCESS",response.data)
                 })
                 .catch(err => commit("FETCH_ERROR",err));
     },

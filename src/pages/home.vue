@@ -141,6 +141,7 @@ export default {
     mounted() {
         //从详情页返回
         // debugger
+        console.log(this.$store)
         if(!localStorage.getItem('postList')) this.scrollToPage(1);
         else
           this.recover();
