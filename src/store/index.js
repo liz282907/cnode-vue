@@ -18,7 +18,10 @@ const mutations = {
     }
 }
 const getters = {
-    tab: state => state.tab
+    tab: state => state.tab,
+    // allPosts: state =>{
+    //     state.contentList.postList
+    // }
 }
 
 const actions = {
