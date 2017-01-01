@@ -42,6 +42,8 @@ import api from '../constants/api'
 import moment from 'moment'
 import Modal from '../components/modal.vue'
 import HeaderBar from '../components/header-bar'
+import { mapActions,mapGetters} from 'vuex'
+
 const {getTopicDetail} = api
 
 moment.locale('zh_cn');
@@ -51,43 +53,50 @@ export default {
         'modal': Modal
     },
     name:'detail',
-    data() {
-        return {
-            loading: false,
-            data: {
-                author:{}
-            },
-            showModal:false
-        }
+    computed: {
+        ...mapGetters(['loading','showModal']),
+        ...mapGetters({
+            'data': 'detail'
+        })
     },
+    // data() {
+    //     return {
+    //         loading: false,
+    //         data: {
+    //             author:{}
+    //         },
+    //         showModal:false
+    //     }
+    // },
     created () {
-        this.fetchData()
+        console.log( 'topic detail created',this.$route.params.id)
+        this.fetchDetail(this.$route.params.id)
     },
     watch:{
-        '$route':'fetchData'
+        '$route'(){
+            // const _this = this;
+            console.log(this.$route.params.id)
+            this.fetchDetail(this.$route.params.id);
+            // this.updateCurId(this.$route.params.id).then(()=>{
+            //     console.log( 'route watch')
+            //     _this.fetchDetail();
+            // });
+
+        }
     },
     // beforeRouteEnter(to,from,next){
     //     //因为进这个导航hook的时候组件还没有创建，要等异步创建好后把prevRoute传过来
     //     next(vm=>{
-    //         debugger;
-    //         vm.fromRoute = from.fullPath;
+    //         console.log(" in detail beforeRouteEnter ",to.params.id)
+    //         vm.$store.dispatch('updateCurId',to.params);
     //     });
     // },
+
     methods: {
         closeModal(){
             this.showModal = !this.showModal;
         },
-        fetchData() {
-            this.error = this.post = null
-            this.loading = true
-            getTopicDetail.id = this.$route.params.id;
-            const self = this
-            axios.get(getTopicDetail.url).then((response) => {
-                let data = response.data.data
-                self.getTransformedResponse(data)
-                self.data = data
-            })
-        },
+        ...mapActions(['updateCurId','fetchDetail']),
         getTransformedResponse (data) {
             data.create_at = moment(data.create_at).fromNow()
             data.last_reply_at = moment(data.last_reply_at).fromNow()
