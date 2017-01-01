@@ -23,7 +23,7 @@
                             </div>
                             <div class="reply-action-group right">
                                 <span class="upvote" @click="upvote(item)"><i class="iconfont icon-upvote"></i>{{item.ups.length}}</span>
-                                <span class="huifu"><i class="iconfont icon-huifu"></i></span>
+                                <span class="huifu" @click=replyComment(item)><i class="iconfont icon-huifu"></i></span>
 
                             </div>
                         </div>
@@ -54,7 +54,7 @@ export default {
     },
     name:'detail',
     computed: {
-        ...mapGetters(['loading','showModal']),
+        ...mapGetters(['loading','showModal','validLogin']),
         ...mapGetters({
             'data': 'detail'
         })
@@ -74,14 +74,8 @@ export default {
     },
     watch:{
         '$route'(){
-            // const _this = this;
             console.log(this.$route.params.id)
             this.fetchDetail(this.$route.params.id);
-            // this.updateCurId(this.$route.params.id).then(()=>{
-            //     console.log( 'route watch')
-            //     _this.fetchDetail();
-            // });
-
         }
     },
     // beforeRouteEnter(to,from,next){
@@ -93,37 +87,14 @@ export default {
     // },
 
     methods: {
+
+        ...mapActions(
+            ['updateCurId','fetchDetail',
+            'toggleModal','upvote',
+            'replyComment']),
         closeModal(){
-            this.showModal = !this.showModal;
+            this.toggleModal(false);
         },
-        ...mapActions(['updateCurId','fetchDetail']),
-        getTransformedResponse (data) {
-            data.create_at = moment(data.create_at).fromNow()
-            data.last_reply_at = moment(data.last_reply_at).fromNow()
-            data.replies = data.replies.map(item=>{
-                return Object.assign(item, {
-                    create_at: moment(item.create_at).fromNow()
-                })
-            })
-            // debugger;
-            return data;
-        },
-        validateLogin(){
-            localStorage.removeItem('user');
-            console.log(localStorage.getItem("user"));
-            if(!localStorage.getItem("user")){
-                this.showModal = true;
-                return false;
-            }
-            return true;
-
-        },
-        upvote(item){
-            if(!this.validateLogin())
-            {
-
-            }
-        }
     }
 }
 
@@ -174,6 +145,7 @@ export default {
                             margin-top: 6px;
                         }
                         .iconfont{
+                            cursor: pointer;
                             font-size: 24px;
                             margin-right: 10px;
                         }

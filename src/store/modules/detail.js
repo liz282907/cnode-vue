@@ -38,6 +38,13 @@ const mutations = {
     },
     [types.UPDATE_DETAIL_ID](state,payload){
         state.id = payload.id;
+    },
+    [types.TOGGLE_MODAL](state,payload){
+        if(payload) state.showModal = payload[0];
+        else state.showModal = !state.showModal;
+        // debugger
+        // if(willShow) state.showModal = willShow;
+        // else state.showModal = !state.showModal;
     }
 }
 
@@ -55,6 +62,27 @@ const actions = {
             commit(types.FETCH_DETAIL_ERROR,err);
         });
     },
+    toggleModal({commit}){
+        const payload = Array.prototype.slice.call(arguments,1);
+        commit(types.TOGGLE_MODAL,payload);
+    },
+    upvote({commit,getters},{id}){
+        if(!getters.validLogin){
+            commit(types.TOGGLE_MODAL,false);
+        }
+        else{
+            commit(types.UPVOTE_COMMENT,{id});
+        }
+    },
+    replyComment({commit,getters},payload){
+        if(!getters.validLogin){
+            commit(types.TOGGLE_MODAL,false);
+        }
+        else{
+            commit(types.REPLY_COMMENT,payload);
+        }
+    }
+
     // updateCurId({commit},payload){
     //     return new Promise((resolve,rej)=>{
     //         commit(types.UPDATE_DETAIL_ID,payload);

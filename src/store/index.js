@@ -90,7 +90,8 @@ const getters = {
             topicDetail: getTopicDetail.url + state.detail.id
         }
     },
-    detail: state => state.allPosts.find(post=>post.id===state.detail.id)
+    detail: state => state.allPosts.find(post=>post.id===state.detail.id),
+    validLogin: state => !!state.user
 }
 
 const actions = {
