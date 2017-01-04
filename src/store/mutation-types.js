@@ -13,10 +13,13 @@ export const UPDATE_DETAIL_ID = 'UPDATE_DETAIL_ID'
 export const UPVOTE_COMMENT = 'UPVOTE_COMMENT'
 export const REPLY_COMMENT = 'REPLY_COMMENT'
 
+export const UPDATE_USER = 'UPDATE_USER'
+
 export const RESET_PAGE = 'RESET_POSTLIST'
 export const SET_STORAGE = 'SET_STORAGE'
 export const RECOVER = 'RECOVER'
 export const INCRE_POSTPAGE = 'INCRE_POSTPAGE'
 export const TOGGLE_SLIDE = 'TOGGLE_SLIDE'
+
 
 

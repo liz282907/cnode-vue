@@ -72,11 +72,9 @@ export default {
             })
             .then(res=>{
                 //hide loading
-                //
-                if(res.data.success){
-                    // localStorage.setItem('user',JSON.stringify(res.data));
 
-                    // const prevRouter = this.$router.
+                if(res.data.success){
+                    this.$store.dispatch('updateUser',res);
                     router.replace(that.fromRoute);
                 }
                 else{

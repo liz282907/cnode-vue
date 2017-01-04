@@ -73,6 +73,8 @@ const mutations = {
         state.postPage++;
     },
     [types.TOGGLE_SLIDE](state){
+        console.log("--contentList--");
+        debugger
         if(arguments[1]!==undefined){
             const newState = arguments[1];
             state.showSlide = newState;

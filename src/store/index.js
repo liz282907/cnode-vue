@@ -30,7 +30,9 @@ const utils = {
 const state = {
     tab: 'all',
     show: '',
-    allPosts: []
+    allPosts: [],
+    accessToken:'',
+    user:{}
 }
 
 const mutations = {
@@ -67,19 +69,10 @@ const mutations = {
         });
         const updatedObj = Object.assign({},prev,data);
         state.allPosts.splice(curIndex,1,updatedObj);
-
-
-
-
-        // state.allPosts.map(post=>{
-
-        // })
-        // debugger
-
-        // const updatePost = state.allPosts.find( ({id})=> id===state.detail.id )[0];
-
-
     },
+    [types.UPDATE_USER](state,user){
+        state.user = user;
+    }
 }
 const getters = {
     // tab: state => state.tab,
@@ -100,6 +93,9 @@ const actions = {
             commit(types.CHANGE_TAB,tab);
             resolve();
         })
+    },
+    updateUser({commit},user){
+        commit(types.UPDATE_USER,user);
     }
 }
 

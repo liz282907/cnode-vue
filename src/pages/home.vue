@@ -20,7 +20,7 @@
           </router-link>
         </li>
       </ul>
-      <slide-card :show='showSlide' :cancel='handleModal(false)'></slide-card>
+      <slide-card :show='showSlide' :cancel='handleModal.bind(null,false)'></slide-card>
 
 
   </div>
@@ -172,6 +172,8 @@ export default {
           types.TOGGLE_SLIDE
         ]),
         toggleSlide(){
+          console.log("--in home vue--")
+          debugger
           this[types.TOGGLE_SLIDE]();
         },
         // infiniteScroll(e){
