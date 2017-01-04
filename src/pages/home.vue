@@ -100,6 +100,7 @@ export default {
             if(to.query && to.query.tab){
               this.$store.dispatch('changeTab',to.query.tab).then(()=>{
                 this.reset();
+                this.scrollToPage(1);
               })
             }
         }
@@ -172,8 +173,6 @@ export default {
           types.TOGGLE_SLIDE
         ]),
         toggleSlide(){
-          console.log("--in home vue--")
-          debugger
           this[types.TOGGLE_SLIDE]();
         },
         // infiniteScroll(e){
