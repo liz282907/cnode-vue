@@ -101,6 +101,7 @@ export default {
               this.$store.dispatch('changeTab',to.query.tab).then(()=>{
                 this.reset();
                 this.scrollToPage(1);
+
               })
             }
         }
@@ -188,7 +189,7 @@ export default {
             */
             if (check_if_needs_more_content()) {
                 this.scrollToPage(this.page);
-                this[types.INCRE_POSTPAGE]();
+                // this[types.INCRE_POSTPAGE]();
             }
         },
         handleModal(value) {

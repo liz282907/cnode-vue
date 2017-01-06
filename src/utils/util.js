@@ -16,13 +16,24 @@ function throtte(func,wait,options){
     return function next(){
 
         const now = Date.now();
+        const context = this;
 
+        // if( isFirst || (gap = now -lastTime) >= wait ){
+        //     if(isFirst) isFirst = false;
+        //     //leading:false时，不执行，等下一次wait的时间以后
+        //     if(finalOptions.leading) {
+        //         func.apply(this,arguments);
+        //         lastTime = now;
+        //     }
+        // }
         if( isFirst || (gap = now -lastTime) >= wait ){
-            if(isFirst) isFirst = false;
-            //leading:false时，不执行，等下一次wait的时间以后
-            if(finalOptions.leading) {
-                func.apply(this,arguments);
-                lastTime = now;
+            //=====更新 2017.1.5
+            lastTime = now;
+            if(isFirst){
+                isFirst = false;
+                //leading:false时，不执行，等下一次wait的时间以后
+                if(finalOptions.leading)
+                    func.apply(context,arguments);
             }
         }
         else{

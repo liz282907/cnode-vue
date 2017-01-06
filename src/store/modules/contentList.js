@@ -37,20 +37,23 @@ const getters = {
 }
 
 const mutations = {
-    [types.FETCH_POSTLIST](state,page){
-        // state.pageList.push(page);
-        state.postPage = page;
-    },
-    [types.FETCH_SUCCESS](state,{data}){
+    // [types.FETCH_POSTLIST](state,page){
+    //     // state.pageList.push(page);
+    //     state.postPage = page;
+    // },
+    /**
+     * 注意这边要把page单独传进来，因为ajax回调后page实际上可能已经变化了
+     */
+    [types.FETCH_SUCCESS](state,{data},page){
         if (data.length) {
-            responseDict[state.postPage] = true;
+            responseDict[page] = true;
             state.count += data.length;
             // state.postList = [...state.postList, ...data];
         }
     },
-    [types.FETCH_ERROR](state,err){
-        responseDict[state.postPage] = false;
-        console.log(`获取第${state.postPage}页列表数据失败`,err);
+    [types.FETCH_ERROR](state,err,page){
+        responseDict[page] = false;
+        console.log(`获取第${page}页列表数据失败`,err);
     },
     [types.RESET_PAGE](state){
         state.postPage = 1;
@@ -87,7 +90,8 @@ const mutations = {
 const actions = {
     scrollToPage({commit,state,rootState},page=1){
         if(responseDict[page]) return;
-        commit(types.FETCH_POSTLIST,page);
+        // commit(types.FETCH_POSTLIST,page);
+        commit(types.INCRE_POSTPAGE);
         axios.get('https://cnodejs.org/api/v1/topics', {
                     params: {
                         page,
@@ -97,9 +101,9 @@ const actions = {
                 })
                 .then(response => {
                     console.log(response.data)
-                    commit("FETCH_SUCCESS",response.data)
+                    commit("FETCH_SUCCESS",response.data,page)
                 })
-                .catch(err => commit("FETCH_ERROR",err));
+                .catch(err => commit("FETCH_ERROR",err,page));
     },
     reset({commit,state,dispatch}){
         //分发给根组件，改变tab值
