@@ -74,7 +74,12 @@ export default {
                 //hide loading
 
                 if(res.data.success){
-                    this.$store.dispatch('updateUser',res);
+                    const userPayload = {
+                        accesstoken: prevToken,
+                        id:res.data.id,
+                        loginname: res.data.loginname
+                    }
+                    this.$store.dispatch('updateUser',userPayload);
                     router.replace(that.fromRoute);
                 }
                 else{

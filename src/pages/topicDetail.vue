@@ -22,7 +22,7 @@
                                 <span class="highlight">{{index+1}}楼 .</span><span>{{item.create_at}}</span>
                             </div>
                             <div class="reply-action-group right">
-                                <span class="upvote" @click="upvote(item)"><i class="iconfont icon-upvote"></i>{{item.ups.length}}</span>
+                                <span class="upvote" @click="upvote(item)"><i :class="['iconfont','icon-upvote',{'highlight':item.ups.includes(user.id)}]"></i>{{item.ups.length}}</span>
                                 <span class="huifu" @click=replyComment(item)><i class="iconfont icon-huifu"></i></span>
 
                             </div>
@@ -54,9 +54,9 @@ export default {
     },
     name:'detail',
     computed: {
-        ...mapGetters(['loading','showModal','validLogin']),
+        ...mapGetters(['loading','showModal','validLogin','user']),
         ...mapGetters({
-            'data': 'detail'
+            'data': 'detail',
         })
     },
     // data() {

@@ -45,6 +45,9 @@ const mutations = {
         // debugger
         // if(willShow) state.showModal = willShow;
         // else state.showModal = !state.showModal;
+    },
+    [types.UPVOTE_COMMENT](state,payload){
+
     }
 }
 
@@ -71,7 +74,14 @@ const actions = {
             commit(types.TOGGLE_MODAL,false);
         }
         else{
-            commit(types.UPVOTE_COMMENT,{id});
+            axios.post(`https://cnodejs.org/api/v1/reply/${id}/ups`,{
+                accesstoken: getters.accesstoken
+            }).then((response)=>{
+                commit(types.UPVOTE_COMMENT,{id,...response.data});
+            },err=>{
+                console.log("upvote comment err",err);
+            })
+
         }
     },
     replyComment({commit,getters},payload){

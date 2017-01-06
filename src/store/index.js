@@ -31,7 +31,6 @@ const state = {
     tab: 'all',
     show: '',
     allPosts: [],
-    accessToken:'',
     user:{}
 }
 
@@ -72,6 +71,18 @@ const mutations = {
     },
     [types.UPDATE_USER](state,user){
         state.user = user;
+    },
+    [types.FREEZE_LOGINMODAL](state){
+        state.detail.showModal = false;
+    },
+    [types.UPVOTE_COMMENT](state,payload){
+        const post = state.allPosts.find(post => post.id === state.detail.id);
+        const reply = post.replies.find(reply=>reply.id===payload.id);
+        if(payload.action==='up') reply.ups.push(state.user.id);
+        else {
+            const index = reply.ups.findIndex(id=> id===payload.id);
+            reply.ups.splice(index,1);
+        }
     }
 }
 const getters = {
@@ -84,7 +95,9 @@ const getters = {
         }
     },
     detail: state => state.allPosts.find(post=>post.id===state.detail.id),
-    validLogin: state => !!state.user
+    validLogin: state => Object.keys(state.user).length,
+    accesstoken: state => state.user.accesstoken,
+    user: state => state.user
 }
 
 const actions = {
@@ -94,9 +107,16 @@ const actions = {
             resolve();
         })
     },
+    /**
+     * [登录后更新store中的user信息，并由于replace route后会回到有弹窗的部分，需要禁用掉modal的显示]
+     * @param  {[type]} options.commit [description]
+     * @param  {[type]} user           [description]
+     */
     updateUser({commit},user){
         commit(types.UPDATE_USER,user);
-    }
+        commit(types.FREEZE_LOGINMODAL);
+    },
+
 }
 
 export default new Vuex.Store({
