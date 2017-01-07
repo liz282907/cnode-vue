@@ -1,10 +1,10 @@
 
 @font-face {font-family: "iconfont";
-  src: url('iconfont.eot?t=1480054774006'); /* IE9*/
-  src: url('iconfont.eot?t=1480054774006#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('iconfont.woff?t=1480054774006') format('woff'), /* chrome, firefox */
-  url('iconfont.ttf?t=1480054774006') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
-  url('iconfont.svg?t=1480054774006#iconfont') format('svg'); /* iOS 4.1- */
+  src: url('iconfont.eot?t=1483776426786'); /* IE9*/
+  src: url('iconfont.eot?t=1483776426786#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1483776426786') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1483776426786') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1483776426786#iconfont') format('svg'); /* iOS 4.1- */
 }
 
 .iconfont {
@@ -12,9 +12,10 @@
   font-size:16px;
   font-style:normal;
   -webkit-font-smoothing: antialiased;
-  -webkit-text-stroke-width: 0.2px;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.icon-guanbi:before { content: "\e601"; }
 
 .icon-menu:before { content: "\e745"; }
 
@@ -22,11 +23,17 @@
 
 .icon-search:before { content: "\e60b"; }
 
+.icon-lianjie:before { content: "\e602"; }
+
 .icon-back:before { content: "\e612"; }
 
 .icon-icon02:before { content: "\e604"; }
 
+.icon-fanhui:before { content: "\e632"; }
+
 .icon-xiaoxi:before { content: "\e698"; }
+
+.icon-yulan:before { content: "\e785"; }
 
 .icon-share:before { content: "\e620"; }
 
@@ -46,11 +53,23 @@
 
 .icon-huifu:before { content: "\e61a"; }
 
+.icon-ai-code:before { content: "\e606"; }
+
 .icon-ask:before { content: "\e621"; }
+
+.icon-liebiao:before { content: "\e603"; }
+
+.icon-jiacu:before { content: "\e617"; }
+
+.icon-youxuliebiaod1ev:before { content: "\e862"; }
+
+.icon-fasong:before { content: "\e650"; }
 
 .icon-gongwenbao:before { content: "\e793"; }
 
 .icon-about:before { content: "\e60c"; }
 
 .icon-upvote:before { content: "\e61b"; }
+
+.icon-yinyong:before { content: "\e605"; }
 

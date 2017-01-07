@@ -5,6 +5,7 @@ moment.locale("zh-cn");
 
 import contentList from './modules/contentList'
 import detail from './modules/detail'
+import reply from './modules/reply'
 import * as types from './mutation-types'
 import { getTabName } from '../constants/config';
 
@@ -122,7 +123,8 @@ const actions = {
 export default new Vuex.Store({
     modules:{
         contentList,
-        detail
+        detail,
+        reply
     },
     state,
     getters,

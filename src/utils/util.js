@@ -51,6 +51,14 @@ function throtte(func,wait,options){
 
 }
 
+function debounce(fn,wait){
+    var last;
+    return function next(){
+        const context = this;
+        clearTimeout(last);
+        last = setTimeout(fn.bind(context,arguments),wait);
+    }
+}
 
 const singleton = (function(){
     let param;
@@ -115,4 +123,4 @@ function check_if_needs_more_content(){
 function isObjEmpty(obj){
     return Object.keys(obj).length===0;
 }
-export { throtte,isScrollDown, check_if_needs_more_content,isObjEmpty};
+export { throtte,debounce,isScrollDown, check_if_needs_more_content,isObjEmpty};

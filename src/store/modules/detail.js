@@ -7,15 +7,27 @@ const {getTopicDetail} = api
 const state = {
     loading: false,
     id: -1,
+    replyIndex:-1,
     // data: {
     //     author:{}
     // },
-    showModal:false
+    showModal:false,
+    showReply:false
 }
 
 const getters = {
 
     showModal: (state) => state.showModal,
+    showReply: state => state.showReply,
+    replyInfo: (state,getters,rootState)=> {
+
+        const replyTo = rootState.allPosts.find(post=>post.id===state.id).replies[state.replyIndex];
+        return {
+            index: state.replyIndex,
+            name: replyTo.author.loginname,
+            id: replyTo.id
+        }
+    },
     topicDetailUrl: state => getTopicDetail.url + state.id
 }
 
@@ -46,8 +58,9 @@ const mutations = {
         // if(willShow) state.showModal = willShow;
         // else state.showModal = !state.showModal;
     },
-    [types.UPVOTE_COMMENT](state,payload){
-
+    [types.START_REPLY](state,index){
+        state.showReply = true;
+        state.replyIndex = index;
     }
 }
 
@@ -84,14 +97,15 @@ const actions = {
 
         }
     },
-    replyComment({commit,getters},payload){
+    replyComment({commit,getters},index){
         if(!getters.validLogin){
             commit(types.TOGGLE_MODAL,false);
         }
         else{
-            commit(types.REPLY_COMMENT,payload);
+            commit(types.START_REPLY,index);
         }
-    }
+    },
+    // submitReply({commit},)
 
     // updateCurId({commit},payload){
     //     return new Promise((resolve,rej)=>{

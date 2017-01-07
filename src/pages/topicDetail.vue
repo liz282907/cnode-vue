@@ -23,7 +23,7 @@
                             </div>
                             <div class="reply-action-group right">
                                 <span class="upvote" @click="upvote(item)"><i :class="['iconfont','icon-upvote',{'highlight':item.ups.includes(user.id)}]"></i>{{item.ups.length}}</span>
-                                <span class="huifu" @click=replyComment(item)><i class="iconfont icon-huifu"></i></span>
+                                <span class="huifu" @click=replyComment(index)><i class="iconfont icon-huifu"></i></span>
 
                             </div>
                         </div>
@@ -34,6 +34,7 @@
             </div>
         </div>
         <modal :show='showModal' :cancel="closeModal"></modal>
+        <reply-box ></reply-box>
     </div>
 
 </template>
@@ -41,6 +42,7 @@
 import api from '../constants/api'
 import moment from 'moment'
 import Modal from '../components/modal.vue'
+import ReplyBox from '../components/markedEditor/markedEditor'
 import HeaderBar from '../components/header-bar'
 import { mapActions,mapGetters} from 'vuex'
 
@@ -50,7 +52,8 @@ moment.locale('zh_cn');
 export default {
     components:{
         'header-bar': HeaderBar,
-        'modal': Modal
+        'modal': Modal,
+        'reply-box': ReplyBox
     },
     name:'detail',
     computed: {
@@ -60,13 +63,7 @@ export default {
         })
     },
     // data() {
-    //     return {
-    //         loading: false,
-    //         data: {
-    //             author:{}
-    //         },
-    //         showModal:false
-    //     }
+
     // },
     created () {
         console.log( 'topic detail created',this.$route.params.id)

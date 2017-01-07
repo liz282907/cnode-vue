@@ -13,6 +13,9 @@ item为每一个reply，ups是点赞该reply的所有用户id,因此只要includ
 需要注意的是，vue template无法访问全局getter,需要mapGetters到.vue里面才行。
 还存在的问题
 
+2. replybox里的状态区分
+reply放入store里面，因为这样的话可以不用点击评论后重新输入
+show 放入data, 监听父传下来的props,自身维护data
 
 ---
 ### 小需求
@@ -21,6 +24,7 @@ item为每一个reply，ups是点赞该reply的所有用户id,因此只要includ
 |  1  |登录后replace路由，更新用户信息,freeze modal| done | |
 |  2  |登录后提示|  | |
 |  3  |点赞后高亮(一登录后对本用户点赞的评论都高亮)|  done | |
+|  4  |createTime相关的用filter处理|   | |
 
 
 ---
