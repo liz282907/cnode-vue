@@ -45,9 +45,14 @@ export default {
         `;
       },
       set(value){
-        // (debounce(()=>{
-        //   this.$store.dispatch('updateTempReply',{reply:value});
-        // },300))();
+        const match = value.match(/:(.+)/);
+
+        if(match.length>=2){
+           (debounce(()=>{
+              this.$store.dispatch('updateTempReply',{reply:match[1]});
+            },300))();
+        }
+
 
       }
     }
